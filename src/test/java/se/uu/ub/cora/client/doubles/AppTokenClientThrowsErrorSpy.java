@@ -18,29 +18,14 @@
  */
 package se.uu.ub.cora.client.doubles;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import se.uu.ub.cora.client.AppTokenClient;
-import se.uu.ub.cora.client.AppTokenClientFactory;
+import se.uu.ub.cora.client.CoraClientException;
 
-public class AppTokenClientFactorySpy implements AppTokenClientFactory {
-
-	public static final String THIS_USER_ID_TRIGGERS_AN_ERROR = "thisUserIdTriggersAnError";
-	public List<AppTokenClientSpy> factored = new ArrayList<>();
-	public List<String> usedUserId = new ArrayList<>();
-	public List<String> usedAppToken = new ArrayList<>();
+public class AppTokenClientThrowsErrorSpy implements AppTokenClient {
 
 	@Override
-	public AppTokenClient factor(String userId, String appToken) {
-		if (THIS_USER_ID_TRIGGERS_AN_ERROR.equals(userId)) {
-			return new AppTokenClientThrowsErrorSpy();
-		}
-		usedUserId.add(userId);
-		usedAppToken.add(appToken);
-		AppTokenClientSpy appTokenClientSpy = new AppTokenClientSpy();
-		factored.add(appTokenClientSpy);
-		return appTokenClientSpy;
+	public String getAuthToken() {
+		throw new CoraClientException("error from AppTokenClientThrowsErrorSpy");
 	}
 
 }

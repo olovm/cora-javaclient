@@ -23,10 +23,16 @@ public class CoraClientImp implements CoraClient {
 
 	private RestClientFactory restClientFactory;
 	private AppTokenClient appTokenClient;
+	private AppTokenClientFactory appTokenClientFactory;
+	private String userId;
+	private String appToken;
 
 	public CoraClientImp(AppTokenClientFactory appTokenClientFactory,
 			RestClientFactory restClientFactory, String userId, String appToken) {
+		this.appTokenClientFactory = appTokenClientFactory;
 		this.restClientFactory = restClientFactory;
+		this.userId = userId;
+		this.appToken = appToken;
 		appTokenClient = appTokenClientFactory.factor(userId, appToken);
 	}
 
@@ -36,6 +42,26 @@ public class CoraClientImp implements CoraClient {
 
 		RestClient restClient = restClientFactory.factorUsingAuthToken(authToken);
 		return restClient.createRecordFromJson(recordType, json);
+	}
+
+	AppTokenClientFactory getAppTokenClientFactory() {
+		// needed for test
+		return appTokenClientFactory;
+	}
+
+	RestClientFactory getRestClientFactory() {
+		// needed for test
+		return restClientFactory;
+	}
+
+	String getUserId() {
+		// needed for test
+		return userId;
+	}
+
+	String getAppToken() {
+		// needed for test
+		return appToken;
 	}
 
 }

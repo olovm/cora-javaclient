@@ -50,6 +50,14 @@ public class CoraClientTest {
 		assertEquals(usedAppToken, appToken);
 	}
 
+	@Test(expectedExceptions = CoraClientException.class)
+	public void testInitErrorWithAuthToken() throws Exception {
+		CoraClientImp coraClient = new CoraClientImp(appTokenClientFactory, restClientFactory,
+				AppTokenClientFactorySpy.THIS_USER_ID_TRIGGERS_AN_ERROR, appToken);
+		String json = "some fake json";
+		coraClient.create("someType", json);
+	}
+
 	@Test
 	public void testCreate() throws Exception {
 		String json = "some fake json";
