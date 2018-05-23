@@ -1,9 +1,9 @@
 package se.uu.ub.cora.client;
 
 public class AppTokenClientCredentials {
-	public String appTokenVerifierUrl;
-	public String userId;
-	public String appToken;
+	public final String appTokenVerifierUrl;
+	public final String userId;
+	public final String appToken;
 
 	public AppTokenClientCredentials(String appTokenVerifierUrl, String userId, String appToken) {
 		this.appTokenVerifierUrl = appTokenVerifierUrl;

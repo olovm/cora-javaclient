@@ -18,10 +18,12 @@
  */
 package se.uu.ub.cora.client.doubles;
 
+import se.uu.ub.cora.client.CoraClientException;
 import se.uu.ub.cora.client.RestClient;
 
 public class RestClientSpy implements RestClient {
 
+	public static final String THIS_RECORD_TYPE_TRIGGERS_AN_ERROR = "thisRecordTypeTriggersAnError";
 	public String recordType;
 	public String recordId;
 	public String returnedAnswer = "Answer from CoraRestClientSpy";
@@ -39,6 +41,9 @@ public class RestClientSpy implements RestClient {
 
 	@Override
 	public String createRecordFromJson(String recordType, String json) {
+		if (THIS_RECORD_TYPE_TRIGGERS_AN_ERROR.equals(recordType)) {
+			throw new CoraClientException("Error from RestClientSpy");
+		}
 		createdUsingRecordType = recordType;
 		createdUsingJson = json;
 		return returnedCreatedAnswer;

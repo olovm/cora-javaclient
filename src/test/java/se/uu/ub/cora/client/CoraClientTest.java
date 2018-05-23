@@ -61,4 +61,10 @@ public class CoraClientTest {
 		assertEquals(restClient.createdUsingJson, json);
 		assertEquals(createdJson, restClient.returnedCreatedAnswer);
 	}
+
+	@Test(expectedExceptions = CoraClientException.class)
+	public void testCreateError() throws Exception {
+		String json = "some fake json";
+		coraClient.create(RestClientSpy.THIS_RECORD_TYPE_TRIGGERS_AN_ERROR, json);
+	}
 }
