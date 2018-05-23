@@ -17,7 +17,7 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.testhelper;
+package se.uu.ub.cora.externaldependenciesdoubles;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;

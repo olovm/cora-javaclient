@@ -16,20 +16,32 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.client;
+package se.uu.ub.cora.client.doubles;
 
-public class CoraRestClientFactorySpy implements CoraRestClientFactory {
+import se.uu.ub.cora.client.RestClient;
 
-	public String baseUrl;
-	public String authToken;
-	public CoraRestClientSpy coraRestClientSpy;
+public class RestClientSpy implements RestClient {
+
+	public String recordType;
+	public String recordId;
+	public String returnedAnswer = "Answer from CoraRestClientSpy";
+
+	public String createdUsingRecordType;
+	public String createdUsingJson;
+	public String returnedCreatedAnswer = "Created from RestClientSpy";
 
 	@Override
-	public CoraRestClient factorUsingUrlAndAuthToken(String baseUrl, String authToken) {
-		this.baseUrl = baseUrl;
-		this.authToken = authToken;
-		coraRestClientSpy = new CoraRestClientSpy();
-		return coraRestClientSpy;
+	public String readRecordAsJson(String recordType, String recordId) {
+		this.recordType = recordType;
+		this.recordId = recordId;
+		return returnedAnswer;
+	}
+
+	@Override
+	public String createRecordFromJson(String recordType, String json) {
+		createdUsingRecordType = recordType;
+		createdUsingJson = json;
+		return returnedCreatedAnswer;
 	}
 
 }

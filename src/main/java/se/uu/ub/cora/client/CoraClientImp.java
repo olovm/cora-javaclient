@@ -16,9 +16,26 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package se.uu.ub.cora.client;
 
-public interface CoraClient {
-	String create(String recordType, String json);
+public class CoraClientImp implements CoraClient {
+
+	private RestClientFactory restClientFactory;
+	private AppTokenClient appTokenClient;
+
+	public CoraClientImp(AppTokenClientFactory appTokenClientFactory,
+			RestClientFactory restClientFactory, String userId, String appToken) {
+		this.restClientFactory = restClientFactory;
+		appTokenClient = appTokenClientFactory.factor(userId, appToken);
+	}
+
+	@Override
+	public String create(String recordType, String json) {
+		String authToken = appTokenClient.getAuthToken();
+
+		RestClient restClient = restClientFactory.factorUsingAuthToken(authToken);
+		return restClient.createRecordFromJson(recordType, json);
+	}
 
 }

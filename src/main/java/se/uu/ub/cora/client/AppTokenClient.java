@@ -20,6 +20,6 @@ package se.uu.ub.cora.client;
 
 public interface AppTokenClient {
 
-	String getAuthToken(String userId, String appToken);
+	String getAuthToken();
 
 }

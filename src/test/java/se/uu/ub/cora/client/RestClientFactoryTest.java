@@ -27,43 +27,44 @@ import org.testng.annotations.Test;
 import se.uu.ub.cora.httphandler.HttpHandlerFactory;
 import se.uu.ub.cora.httphandler.HttpHandlerFactoryImp;
 
-public class CoraRestClientFactoryTest {
+public class RestClientFactoryTest {
 
-	private CoraRestClientFactory factory;
-	private String baseUrl = "";
+	private RestClientFactory factory;
+	private String baseUrl = "someBaseUrl";
 	private String authToken = "";
 
 	@BeforeMethod
 	public void beforeMethod() {
-		factory = new CoraRestClientFactoryImp();
+		factory = new RestClientFactoryImp(baseUrl);
 	}
 
 	@Test
 	public void testFactor() throws Exception {
-		CoraRestClient coraRestClient = factory.factorUsingUrlAndAuthToken(baseUrl, authToken);
-		assertTrue(coraRestClient instanceof CoraRestClientImp);
+		RestClient coraRestClient = factory.factorUsingAuthToken(authToken);
+		assertTrue(coraRestClient instanceof RestClientImp);
 	}
 
 	@Test
 	public void testFactorAddedDependenciesIsOk() throws Exception {
-		CoraRestClientImp coraRestClient = (CoraRestClientImp) factory
-				.factorUsingUrlAndAuthToken(baseUrl, authToken);
+		RestClientImp coraRestClient = (RestClientImp) factory
+				.factorUsingAuthToken(authToken);
 		HttpHandlerFactory handlerFactory = coraRestClient.getHttpHandlerFactory();
 		assertTrue(handlerFactory instanceof HttpHandlerFactoryImp);
 	}
 
 	@Test
 	public void testInputsSentOnToClient() throws Exception {
-		CoraRestClientImp coraRestClient = (CoraRestClientImp) factory
-				.factorUsingUrlAndAuthToken("someBaseUrl", "someAuthToken");
+		RestClientImp coraRestClient = (RestClientImp) factory
+				.factorUsingAuthToken("someAuthToken");
 		assertEquals(coraRestClient.getBaseUrl(), "someBaseUrl");
 		assertEquals(coraRestClient.getAuthToken(), "someAuthToken");
 	}
 
 	@Test
 	public void testInputsSentOnToClientForSure() throws Exception {
-		CoraRestClientImp coraRestClient = (CoraRestClientImp) factory
-				.factorUsingUrlAndAuthToken("someBaseUrl2", "someAuthToken2");
+		factory = new RestClientFactoryImp("someBaseUrl2");
+		RestClientImp coraRestClient = (RestClientImp) factory
+				.factorUsingAuthToken("someAuthToken2");
 		assertEquals(coraRestClient.getBaseUrl(), "someBaseUrl2");
 		assertEquals(coraRestClient.getAuthToken(), "someAuthToken2");
 	}

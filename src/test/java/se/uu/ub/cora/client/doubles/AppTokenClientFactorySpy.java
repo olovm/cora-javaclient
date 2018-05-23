@@ -16,25 +16,27 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.client;
+package se.uu.ub.cora.client.doubles;
 
-public class CoraRestClientSpy implements CoraRestClient {
+import java.util.ArrayList;
+import java.util.List;
 
-	public String recordType;
-	public String recordId;
-	public String returnedAnswer = "Answer from CoraRestClientSpy";
+import se.uu.ub.cora.client.AppTokenClient;
+import se.uu.ub.cora.client.AppTokenClientFactory;
+
+public class AppTokenClientFactorySpy implements AppTokenClientFactory {
+
+	public List<AppTokenClientSpy> factored = new ArrayList<>();
+	public List<String> usedUserId = new ArrayList<>();
+	public List<String> usedAppToken = new ArrayList<>();
 
 	@Override
-	public String readRecordAsJson(String recordType, String recordId) {
-		this.recordType = recordType;
-		this.recordId = recordId;
-		return returnedAnswer;
-	}
-
-	@Override
-	public String createRecordFromJson(String recordType, String json) {
-		// TODO Auto-generated method stub
-		return null;
+	public AppTokenClient factor(String userId, String appToken) {
+		usedUserId.add(userId);
+		usedAppToken.add(appToken);
+		AppTokenClientSpy appTokenClientSpy = new AppTokenClientSpy();
+		factored.add(appTokenClientSpy);
+		return appTokenClientSpy;
 	}
 
 }

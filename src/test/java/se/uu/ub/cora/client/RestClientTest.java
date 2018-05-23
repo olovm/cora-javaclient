@@ -24,18 +24,18 @@ import static org.testng.Assert.assertEquals;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.testhelper.HttpHandlerFactorySpy;
+import se.uu.ub.cora.externaldependenciesdoubles.HttpHandlerFactorySpy;
 
-public class CoraRestClientTest {
+public class RestClientTest {
 	private HttpHandlerFactorySpy httpHandlerFactorySpy;
-	private CoraRestClient restClient;
+	private RestClient restClient;
 
 	@BeforeMethod
 	public void setUp() {
 		httpHandlerFactorySpy = new HttpHandlerFactorySpy();
 		String baseUrl = "http://localhost:8080/therest/rest/record/";
 		String authToken = "someToken";
-		restClient = CoraRestClientImp.usingHttpHandlerFactoryAndBaseUrlAndAuthToken(
+		restClient = RestClientImp.usingHttpHandlerFactoryAndBaseUrlAndAuthToken(
 				httpHandlerFactorySpy, baseUrl, authToken);
 	}
 

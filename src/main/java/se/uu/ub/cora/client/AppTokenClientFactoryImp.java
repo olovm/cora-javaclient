@@ -18,10 +18,24 @@
  */
 package se.uu.ub.cora.client;
 
-public interface CoraRestClient {
+import se.uu.ub.cora.httphandler.HttpHandlerFactory;
+import se.uu.ub.cora.httphandler.HttpHandlerFactoryImp;
 
-	String readRecordAsJson(String recordType, String recordId);
+public class AppTokenClientFactoryImp implements AppTokenClientFactory {
 
-	String createRecordFromJson(String recordType, String json);
+	private String appTokenVerifierUrl;
+
+	public AppTokenClientFactoryImp(String appTokenVerifierUrl) {
+		this.appTokenVerifierUrl = appTokenVerifierUrl;
+	}
+
+	@Override
+	public AppTokenClient factor(String userId, String appToken) {
+		HttpHandlerFactory httpHandlerFactory = new HttpHandlerFactoryImp();
+		AppTokenClientCredentials credentials = new AppTokenClientCredentials(appTokenVerifierUrl,
+				userId, appToken);
+		return AppTokenClientImp.usingHttpHandlerFactoryAndCredentials(
+				httpHandlerFactory, credentials);
+	}
 
 }

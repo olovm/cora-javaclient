@@ -17,11 +17,13 @@
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package se.uu.ub.cora.testhelper;
+package se.uu.ub.cora.externaldependenciesdoubles;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import se.uu.ub.cora.httphandler.HttpHandler;
 import se.uu.ub.cora.httphandler.HttpHandlerFactory;
@@ -38,6 +40,8 @@ public class HttpHandlerFactorySpy implements HttpHandlerFactory {
 	public HttpMultiPartUploaderSpy httpMultiPartUploaderSpy;
 	public HttpMultiPartUploaderInvalidSpy httpMultiPartUploaderInvalidSpy;
 
+	public List<HttpHandler> factored = new ArrayList<>();
+
 	@Override
 	public HttpHandler factor(String urlString) {
 		this.urlString = urlString;
@@ -47,9 +51,11 @@ public class HttpHandlerFactorySpy implements HttpHandlerFactory {
 			if (factorValid) {
 				httpHandlerSpy = HttpHandlerSpy.usingURLConnection(urlConnection);
 				httpHandlerSpy.responseCode = responseCode;
+				factored.add(httpHandlerSpy);
 				return httpHandlerSpy;
 			}
 			httpHandlerInvalidSpy = HttpHandlerInvalidSpy.usingURLConnection(urlConnection);
+			factored.add(httpHandlerInvalidSpy);
 			return httpHandlerInvalidSpy;
 		} catch (IOException e) {
 			throw new RuntimeException(e);

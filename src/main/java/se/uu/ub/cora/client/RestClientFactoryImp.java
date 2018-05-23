@@ -18,7 +18,22 @@
  */
 package se.uu.ub.cora.client;
 
-public interface CoraClient {
-	String create(String recordType, String json);
+import se.uu.ub.cora.httphandler.HttpHandlerFactory;
+import se.uu.ub.cora.httphandler.HttpHandlerFactoryImp;
+
+public class RestClientFactoryImp implements RestClientFactory {
+
+	private String baseUrl;
+
+	public RestClientFactoryImp(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
+
+	@Override
+	public RestClient factorUsingAuthToken(String authToken) {
+		HttpHandlerFactory httpHandlerFactory = new HttpHandlerFactoryImp();
+		return RestClientImp.usingHttpHandlerFactoryAndBaseUrlAndAuthToken(httpHandlerFactory,
+				baseUrl, authToken);
+	}
 
 }

@@ -16,9 +16,15 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.client;
+package se.uu.ub.cora.client.doubles;
 
-public interface CoraClient {
-	String create(String recordType, String json);
+import se.uu.ub.cora.client.AppTokenClient;
+
+public class AppTokenClientSpy implements AppTokenClient {
+
+	@Override
+	public String getAuthToken() {
+		return "someAuthTokenFromSpy";
+	}
 
 }

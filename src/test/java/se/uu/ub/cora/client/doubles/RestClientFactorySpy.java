@@ -16,18 +16,29 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.client;
+package se.uu.ub.cora.client.doubles;
 
-import se.uu.ub.cora.httphandler.HttpHandlerFactory;
-import se.uu.ub.cora.httphandler.HttpHandlerFactoryImp;
+import java.util.ArrayList;
+import java.util.List;
 
-public class CoraRestClientFactoryImp implements CoraRestClientFactory {
+import se.uu.ub.cora.client.RestClient;
+import se.uu.ub.cora.client.RestClientFactory;
+
+public class RestClientFactorySpy implements RestClientFactory {
+
+	public String baseUrl;
+	public String authToken;
+	public RestClientSpy restClientSpy;
+	public List<RestClientSpy> factored = new ArrayList<>();
+	public String usedAuthToken;
 
 	@Override
-	public CoraRestClient factorUsingUrlAndAuthToken(String baseUrl, String authToken) {
-		HttpHandlerFactory httpHandlerFactory = new HttpHandlerFactoryImp();
-		return CoraRestClientImp.usingHttpHandlerFactoryAndBaseUrlAndAuthToken(httpHandlerFactory,
-				baseUrl, authToken);
+	public RestClient factorUsingAuthToken(String authToken) {
+		this.authToken = authToken;
+		this.usedAuthToken = authToken;
+		restClientSpy = new RestClientSpy();
+		factored.add(restClientSpy);
+		return restClientSpy;
 	}
 
 }

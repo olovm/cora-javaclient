@@ -23,26 +23,36 @@ import se.uu.ub.cora.httphandler.HttpHandlerFactory;
 
 public final class AppTokenClientImp implements AppTokenClient {
 
+	private static final String CORA_REST_APPTOKEN_ENDPOINT = "rest/apptoken/";
 	private static final int CREATED = 201;
 	private static final int DISTANCE_TO_START_OF_TOKEN = 21;
 	private HttpHandlerFactory httpHandlerFactory;
 	private String appTokenVerifierUrl;
+	private String userId;
+	private String appToken;
+	private String authToken;
 
-	public static AppTokenClientImp usingHttpHandlerFactoryAndAppTokenVerifierUrl(
-			HttpHandlerFactory httpHandlerFactory, String appTokenVerifierUrl) {
-		return new AppTokenClientImp(httpHandlerFactory, appTokenVerifierUrl);
+	public static AppTokenClientImp usingHttpHandlerFactoryAndCredentials(
+			HttpHandlerFactory httpHandlerFactory, AppTokenClientCredentials credentials) {
+		return new AppTokenClientImp(httpHandlerFactory, credentials);
 	}
 
-	private AppTokenClientImp(HttpHandlerFactory httpHandlerFactory, String appTokenVerifierUrl) {
+	public AppTokenClientImp(HttpHandlerFactory httpHandlerFactory,
+			AppTokenClientCredentials credentials) {
 		this.httpHandlerFactory = httpHandlerFactory;
-		this.appTokenVerifierUrl = appTokenVerifierUrl + "rest/apptoken/";
+		this.appTokenVerifierUrl = credentials.appTokenVerifierUrl + CORA_REST_APPTOKEN_ENDPOINT;
+		this.userId = credentials.userId;
+		this.appToken = credentials.appToken;
 	}
 
 	@Override
-	public String getAuthToken(String userId, String appToken) {
-		HttpHandler httpHandler = createHttpHandler(userId);
-		createAuthTokenUsingHttpHandler(appToken, httpHandler);
-		return possiblyGetAuthToken(httpHandler);
+	public String getAuthToken() {
+		if (null == authToken) {
+			HttpHandler httpHandler = createHttpHandler(userId);
+			createAuthTokenUsingHttpHandler(appToken, httpHandler);
+			authToken = possiblyGetAuthTokenFromAnswer(httpHandler);
+		}
+		return authToken;
 	}
 
 	private HttpHandler createHttpHandler(String userId) {
@@ -54,7 +64,7 @@ public final class AppTokenClientImp implements AppTokenClient {
 		httpHandler.setOutput(appToken);
 	}
 
-	private String possiblyGetAuthToken(HttpHandler httpHandler) {
+	private String possiblyGetAuthTokenFromAnswer(HttpHandler httpHandler) {
 		if (CREATED == httpHandler.getResponseCode()) {
 			return getAuthToken(httpHandler);
 		}
@@ -69,6 +79,26 @@ public final class AppTokenClientImp implements AppTokenClient {
 	private String extractCreatedTokenFromResponseText(String responseText) {
 		int idIndex = responseText.lastIndexOf("\"name\":\"id\"") + DISTANCE_TO_START_OF_TOKEN;
 		return responseText.substring(idIndex, responseText.indexOf('"', idIndex));
+	}
+
+	HttpHandlerFactory getHttpHandlerFactory() {
+		// needed for test
+		return httpHandlerFactory;
+	}
+
+	String getAppTokenVerifierUrl() {
+		// needed for test
+		return appTokenVerifierUrl;
+	}
+
+	String getUserId() {
+		// needed for test
+		return userId;
+	}
+
+	String getAppToken() {
+		// needed for test
+		return appToken;
 	}
 
 }

@@ -23,43 +23,57 @@ import static org.testng.Assert.assertEquals;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.testhelper.HttpHandlerFactorySpy;
+import se.uu.ub.cora.externaldependenciesdoubles.HttpHandlerFactorySpy;
 
 public class AppTokenClientTest {
 	private HttpHandlerFactorySpy httpHandlerFactorySpy;
-	private String appTokenVerifierUrl = "http://localhost:8080/apptokenverifier/";
-	private String appToken = "02a89fd5-c768-4209-9ecc-d80bd793b01e";
+	private AppTokenClientCredentials appTokenCredentials = new AppTokenClientCredentials(
+			"http://localhost:8080/apptokenverifier/", "someUserId",
+			"02a89fd5-c768-4209-9ecc-d80bd793b01e");
 	private AppTokenClient appTokenClient;
 
 	@BeforeMethod
 	public void setUp() {
 		httpHandlerFactorySpy = new HttpHandlerFactorySpy();
 		httpHandlerFactorySpy.setResponseCode(201);
-		appTokenClient = AppTokenClientImp.usingHttpHandlerFactoryAndAppTokenVerifierUrl(
-				httpHandlerFactorySpy, appTokenVerifierUrl);
+		appTokenClient = AppTokenClientImp
+				.usingHttpHandlerFactoryAndCredentials(httpHandlerFactorySpy, appTokenCredentials);
 	}
 
 	@Test
 	public void testHttpHandlerSetupCorrectly() throws Exception {
-		appTokenClient.getAuthToken("someUserId", appToken);
+		appTokenClient.getAuthToken();
 		assertEquals(httpHandlerFactorySpy.urlString,
 				"http://localhost:8080/apptokenverifier/rest/apptoken/someUserId");
 		assertEquals(getRequestMethod(), "POST");
 		assertEquals(getNumberOfRequestProperties(), 0);
-		assertEquals(getOutputString(), appToken);
+		assertEquals(getOutputString(), appTokenCredentials.appToken);
 	}
 
 	@Test
 	public void testGetAuthToken() throws Exception {
-		String authToken = appTokenClient.getAuthToken("someUserId", appToken);
+		String authToken = appTokenClient.getAuthToken();
 		assertEquals(authToken, "a1acff95-5849-4e10-9ee9-4b192aef17fd");
+	}
+
+	@Test
+	public void testGetAuthTokenTwiceIsOnlyCreatedOnceOnServer() throws Exception {
+		assertEquals(httpHandlerFactorySpy.factored.size(), 0);
+
+		String authToken = appTokenClient.getAuthToken();
+		assertEquals(authToken, "a1acff95-5849-4e10-9ee9-4b192aef17fd");
+		assertEquals(httpHandlerFactorySpy.factored.size(), 1);
+
+		String authToken2 = appTokenClient.getAuthToken();
+		assertEquals(authToken2, "a1acff95-5849-4e10-9ee9-4b192aef17fd");
+		assertEquals(httpHandlerFactorySpy.factored.size(), 1);
 	}
 
 	@Test(expectedExceptions = CoraClientException.class, expectedExceptionsMessageRegExp = ""
 			+ "Could not create authToken")
 	public void testGetAuthTokenNotOk() {
 		httpHandlerFactorySpy.changeFactoryToFactorInvalidHttpHandlers();
-		appTokenClient.getAuthToken("someUserId", appToken);
+		appTokenClient.getAuthToken();
 	}
 
 	private String getOutputString() {
@@ -73,27 +87,4 @@ public class AppTokenClientTest {
 	private int getNumberOfRequestProperties() {
 		return httpHandlerFactorySpy.httpHandlerSpy.requestProperties.size();
 	}
-
-	private String getRequestProperty(String key) {
-		return httpHandlerFactorySpy.httpHandlerSpy.requestProperties.get(key);
-	}
-	// @Test
-	// public void testGetAuthTokenForAppToken() {
-	// httpHandlerFactorySpy.setResponseCode(201);
-	// fixture.setUserId("someUserId");
-	// fixture.setAppToken("02a89fd5-c768-4209-9ecc-d80bd793b01e");
-	// String json = fixture.getAuthTokenForAppToken();
-	// HttpHandlerSpy httpHandlerSpy = httpHandlerFactorySpy.httpHandlerSpy;
-	// assertEquals(httpHandlerSpy.requestMetod, "POST");
-	// assertEquals(httpHandlerSpy.outputString,
-	// "02a89fd5-c768-4209-9ecc-d80bd793b01e");
-	// assertEquals(httpHandlerFactorySpy.urlString,
-	// "http://localhost:8080/apptokenverifier/rest/apptoken/someUserId");
-	// assertEquals(json,
-	// "{\"children\":[{\"name\":\"id\",\"value\":\"a1acff95-5849-4e10-9ee9-4b192aef17fd\"}"
-	// +
-	// ",{\"name\":\"validForNoSeconds\",\"value\":\"600\"}],\"name\":\"authToken\"}");
-	// assertEquals(fixture.getAuthToken(), "a1acff95-5849-4e10-9ee9-4b192aef17fd");
-	// assertEquals(fixture.getStatusType(), Response.Status.CREATED);
-	// }
 }

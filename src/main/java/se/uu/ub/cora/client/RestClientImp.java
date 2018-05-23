@@ -24,7 +24,7 @@ import javax.ws.rs.core.Response.Status;
 import se.uu.ub.cora.httphandler.HttpHandler;
 import se.uu.ub.cora.httphandler.HttpHandlerFactory;
 
-public final class CoraRestClientImp implements CoraRestClient {
+public final class RestClientImp implements RestClient {
 	private static final int CREATED = 201;
 	private static final String APPLICATION_UUB_RECORD_JSON = "application/vnd.uub.record+json";
 	private static final String ACCEPT = "Accept";
@@ -32,12 +32,12 @@ public final class CoraRestClientImp implements CoraRestClient {
 	private String baseUrl;
 	private String authToken;
 
-	public static CoraRestClientImp usingHttpHandlerFactoryAndBaseUrlAndAuthToken(
+	public static RestClientImp usingHttpHandlerFactoryAndBaseUrlAndAuthToken(
 			HttpHandlerFactory httpHandlerFactory, String baseUrl, String authToken) {
-		return new CoraRestClientImp(httpHandlerFactory, baseUrl, authToken);
+		return new RestClientImp(httpHandlerFactory, baseUrl, authToken);
 	}
 
-	private CoraRestClientImp(HttpHandlerFactory httpHandlerFactory, String baseUrl,
+	private RestClientImp(HttpHandlerFactory httpHandlerFactory, String baseUrl,
 			String authToken) {
 		this.httpHandlerFactory = httpHandlerFactory;
 		this.baseUrl = baseUrl;

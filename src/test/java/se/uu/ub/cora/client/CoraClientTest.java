@@ -1,0 +1,64 @@
+/*
+ * Copyright 2018 Uppsala University Library
+ *
+ * This file is part of Cora.
+ *
+ *     Cora is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Cora is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package se.uu.ub.cora.client;
+
+import static org.testng.Assert.assertEquals;
+
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import se.uu.ub.cora.client.doubles.AppTokenClientFactorySpy;
+import se.uu.ub.cora.client.doubles.RestClientFactorySpy;
+import se.uu.ub.cora.client.doubles.RestClientSpy;
+
+public class CoraClientTest {
+	private CoraClient coraClient;
+	private RestClientFactorySpy restClientFactory;
+	private AppTokenClientFactorySpy appTokenClientFactory;
+	private String userId = "someUserId";
+	private String appToken = "someAppToken";
+
+	@BeforeMethod
+	public void BeforeMethod() {
+		restClientFactory = new RestClientFactorySpy();
+		appTokenClientFactory = new AppTokenClientFactorySpy();
+		coraClient = new CoraClientImp(appTokenClientFactory, restClientFactory, userId, appToken);
+	}
+
+	@Test
+	public void testInit() throws Exception {
+		assertEquals(appTokenClientFactory.factored.size(), 1);
+		String usedUserId = appTokenClientFactory.usedUserId.get(0);
+		assertEquals(usedUserId, userId);
+		String usedAppToken = appTokenClientFactory.usedAppToken.get(0);
+		assertEquals(usedAppToken, appToken);
+	}
+
+	@Test
+	public void testCreate() throws Exception {
+		String json = "some fake json";
+		String createdJson = coraClient.create("someType", json);
+		RestClientSpy restClient = restClientFactory.factored.get(0);
+		assertEquals(restClientFactory.factored.size(), 1);
+		assertEquals(restClientFactory.usedAuthToken, "someAuthTokenFromSpy");
+		assertEquals(restClient.createdUsingRecordType, "someType");
+		assertEquals(restClient.createdUsingJson, json);
+		assertEquals(createdJson, restClient.returnedCreatedAnswer);
+	}
+}

@@ -18,7 +18,10 @@
  */
 package se.uu.ub.cora.client;
 
-public interface CoraClient {
-	String create(String recordType, String json);
+public interface RestClient {
+
+	String readRecordAsJson(String recordType, String recordId);
+
+	String createRecordFromJson(String recordType, String json);
 
 }
