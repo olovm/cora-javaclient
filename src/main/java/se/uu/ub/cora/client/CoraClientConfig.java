@@ -18,14 +18,11 @@
  */
 package se.uu.ub.cora.client;
 
-public class AppTokenClientCredentials {
-	public final String appTokenVerifierUrl;
-	public final String userId;
-	public final String appToken;
+public class CoraClientConfig {
 
-	public AppTokenClientCredentials(String appTokenVerifierUrl, String userId, String appToken) {
-		this.appTokenVerifierUrl = appTokenVerifierUrl;
-		this.userId = userId;
-		this.appToken = appToken;
+	public CoraClientConfig(String userId, String appToken, String appTokenVerifierUrl,
+			String coraUrl) {
+		// TODO Auto-generated constructor stub
 	}
+
 }
