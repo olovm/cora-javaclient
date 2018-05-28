@@ -20,9 +20,17 @@ package se.uu.ub.cora.client;
 
 public class CoraClientConfig {
 
+	public final String userId;
+	public final String appToken;
+	public final String appTokenVerifierUrl;
+	public final String coraUrl;
+
 	public CoraClientConfig(String userId, String appToken, String appTokenVerifierUrl,
 			String coraUrl) {
-		// TODO Auto-generated constructor stub
+		this.userId = userId;
+		this.appToken = appToken;
+		this.appTokenVerifierUrl = appTokenVerifierUrl;
+		this.coraUrl = coraUrl;
 	}
 
 }

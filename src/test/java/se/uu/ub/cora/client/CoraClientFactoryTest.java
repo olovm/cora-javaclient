@@ -33,7 +33,7 @@ public class CoraClientFactoryTest {
 	public void beforeMethod() {
 		appTokenVerifierUrl = "someVerifierUrl";
 		baseUrl = "someBaseUrl";
-		CoraClientFactoryImp clientFactory = new CoraClientFactoryImp(appTokenVerifierUrl, baseUrl);
+		CoraClientFactoryImp clientFactory = CoraClientFactoryImp.usingAppTokenVerifierUrlAndBaseUrl(appTokenVerifierUrl, baseUrl);
 		String userId = "someUserId";
 		String appToken = "someAppToken";
 		coraClient = (CoraClientImp) clientFactory.factor(userId, appToken);

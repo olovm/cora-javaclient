@@ -20,10 +20,15 @@ package se.uu.ub.cora.client;
 
 public final class CoraClientFactoryImp implements CoraClientFactory {
 
+	public static CoraClientFactoryImp usingAppTokenVerifierUrlAndBaseUrl(
+			String appTokenVerifierUrl, String baseUrl) {
+		return new CoraClientFactoryImp(appTokenVerifierUrl, baseUrl);
+	}
+
 	private AppTokenClientFactoryImp appTokenClientFactory;
 	private RestClientFactoryImp restClientFactory;
 
-	public CoraClientFactoryImp(String appTokenVerifierUrl, String baseUrl) {
+	private CoraClientFactoryImp(String appTokenVerifierUrl, String baseUrl) {
 		appTokenClientFactory = new AppTokenClientFactoryImp(appTokenVerifierUrl);
 		restClientFactory = new RestClientFactoryImp(baseUrl);
 	}
