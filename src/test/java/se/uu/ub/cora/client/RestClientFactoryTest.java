@@ -46,8 +46,7 @@ public class RestClientFactoryTest {
 
 	@Test
 	public void testFactorAddedDependenciesIsOk() throws Exception {
-		RestClientImp coraRestClient = (RestClientImp) factory
-				.factorUsingAuthToken(authToken);
+		RestClientImp coraRestClient = (RestClientImp) factory.factorUsingAuthToken(authToken);
 		HttpHandlerFactory handlerFactory = coraRestClient.getHttpHandlerFactory();
 		assertTrue(handlerFactory instanceof HttpHandlerFactoryImp);
 	}
@@ -56,7 +55,7 @@ public class RestClientFactoryTest {
 	public void testInputsSentOnToClient() throws Exception {
 		RestClientImp coraRestClient = (RestClientImp) factory
 				.factorUsingAuthToken("someAuthToken");
-		assertEquals(coraRestClient.getBaseUrl(), "someBaseUrl");
+		assertEquals(coraRestClient.getBaseUrl(), "someBaseUrlrecord/");
 		assertEquals(coraRestClient.getAuthToken(), "someAuthToken");
 	}
 
@@ -65,7 +64,7 @@ public class RestClientFactoryTest {
 		factory = new RestClientFactoryImp("someBaseUrl2");
 		RestClientImp coraRestClient = (RestClientImp) factory
 				.factorUsingAuthToken("someAuthToken2");
-		assertEquals(coraRestClient.getBaseUrl(), "someBaseUrl2");
+		assertEquals(coraRestClient.getBaseUrl(), "someBaseUrl2record/");
 		assertEquals(coraRestClient.getAuthToken(), "someAuthToken2");
 	}
 }

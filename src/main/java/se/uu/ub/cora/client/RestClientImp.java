@@ -37,10 +37,9 @@ public final class RestClientImp implements RestClient {
 		return new RestClientImp(httpHandlerFactory, baseUrl, authToken);
 	}
 
-	private RestClientImp(HttpHandlerFactory httpHandlerFactory, String baseUrl,
-			String authToken) {
+	private RestClientImp(HttpHandlerFactory httpHandlerFactory, String baseUrl, String authToken) {
 		this.httpHandlerFactory = httpHandlerFactory;
-		this.baseUrl = baseUrl;
+		this.baseUrl = baseUrl + "record/";
 		this.authToken = authToken;
 	}
 

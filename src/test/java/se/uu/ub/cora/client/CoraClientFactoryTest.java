@@ -28,16 +28,17 @@ public class CoraClientFactoryTest {
 	private CoraClientImp coraClient;
 	private String appTokenVerifierUrl;
 	private String baseUrl;
+	private CoraClientFactoryImp clientFactory;
 
 	@BeforeMethod
 	public void beforeMethod() {
 		appTokenVerifierUrl = "someVerifierUrl";
 		baseUrl = "someBaseUrl";
-		CoraClientFactoryImp clientFactory = CoraClientFactoryImp.usingAppTokenVerifierUrlAndBaseUrl(appTokenVerifierUrl, baseUrl);
+		clientFactory = CoraClientFactoryImp.usingAppTokenVerifierUrlAndBaseUrl(appTokenVerifierUrl,
+				baseUrl);
 		String userId = "someUserId";
 		String appToken = "someAppToken";
 		coraClient = (CoraClientImp) clientFactory.factor(userId, appToken);
-
 	}
 
 	@Test
@@ -50,12 +51,22 @@ public class CoraClientFactoryTest {
 		RestClientFactory restClientFactory = coraClient.getRestClientFactory();
 		assertTrue(restClientFactory instanceof RestClientFactory);
 		RestClientImp restClient = (RestClientImp) restClientFactory.factorUsingAuthToken("");
-		assertEquals(restClient.getBaseUrl(), baseUrl);
+		assertEquals(restClient.getBaseUrl(), baseUrl + "record/");
 	}
 
 	@Test
 	public void testFactorParametersSentAlong() throws Exception {
 		assertEquals(coraClient.getUserId(), "someUserId");
 		assertEquals(coraClient.getAppToken(), "someAppToken");
+	}
+
+	@Test
+	public void testGetAppTokenVerifierUrl() throws Exception {
+		assertEquals(clientFactory.getAppTokenVerifierUrl(), appTokenVerifierUrl);
+	}
+
+	@Test
+	public void testGetBaseUrl() throws Exception {
+		assertEquals(clientFactory.getBaseUrl(), baseUrl);
 	}
 }

@@ -27,8 +27,12 @@ public final class CoraClientFactoryImp implements CoraClientFactory {
 
 	private AppTokenClientFactoryImp appTokenClientFactory;
 	private RestClientFactoryImp restClientFactory;
+	private String appTokenVerifierUrl;
+	private String baseUrl;
 
 	private CoraClientFactoryImp(String appTokenVerifierUrl, String baseUrl) {
+		this.appTokenVerifierUrl = appTokenVerifierUrl;
+		this.baseUrl = baseUrl;
 		appTokenClientFactory = new AppTokenClientFactoryImp(appTokenVerifierUrl);
 		restClientFactory = new RestClientFactoryImp(baseUrl);
 	}
@@ -36,6 +40,16 @@ public final class CoraClientFactoryImp implements CoraClientFactory {
 	@Override
 	public CoraClient factor(String userId, String appToken) {
 		return new CoraClientImp(appTokenClientFactory, restClientFactory, userId, appToken);
+	}
+
+	public String getAppTokenVerifierUrl() {
+		// needed for test
+		return appTokenVerifierUrl;
+	}
+
+	public String getBaseUrl() {
+		// needed for test
+		return baseUrl;
 	}
 
 }

@@ -33,7 +33,7 @@ public class RestClientTest {
 	@BeforeMethod
 	public void setUp() {
 		httpHandlerFactorySpy = new HttpHandlerFactorySpy();
-		String baseUrl = "http://localhost:8080/therest/rest/record/";
+		String baseUrl = "http://localhost:8080/therest/rest/";
 		String authToken = "someToken";
 		restClient = RestClientImp.usingHttpHandlerFactoryAndBaseUrlAndAuthToken(
 				httpHandlerFactorySpy, baseUrl, authToken);
