@@ -21,4 +21,8 @@ package se.uu.ub.cora.client;
 public interface CoraClient {
 	String create(String recordType, String json);
 
+	String read(String recordType, String recordId);
+
+	String update(String recordType, String recordId, String json);
+
 }

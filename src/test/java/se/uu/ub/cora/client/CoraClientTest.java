@@ -59,6 +59,22 @@ public class CoraClientTest {
 	}
 
 	@Test
+	public void testRead() throws Exception {
+		String readJson = coraClient.read("someType", "someId");
+		RestClientSpy restClient = restClientFactory.factored.get(0);
+		assertEquals(restClientFactory.factored.size(), 1);
+		assertEquals(restClientFactory.usedAuthToken, "someAuthTokenFromSpy");
+		assertEquals(restClient.recordType, "someType");
+		assertEquals(restClient.recordId, "someId");
+		assertEquals(readJson, restClient.returnedAnswer);
+	}
+
+	@Test(expectedExceptions = CoraClientException.class)
+	public void testReadError() throws Exception {
+		coraClient.read(RestClientSpy.THIS_RECORD_TYPE_TRIGGERS_AN_ERROR, "someRecordId");
+	}
+
+	@Test
 	public void testCreate() throws Exception {
 		String json = "some fake json";
 		String createdJson = coraClient.create("someType", json);
@@ -75,4 +91,24 @@ public class CoraClientTest {
 		String json = "some fake json";
 		coraClient.create(RestClientSpy.THIS_RECORD_TYPE_TRIGGERS_AN_ERROR, json);
 	}
+
+	@Test
+	public void testUpdate() throws Exception {
+		String json = "some fake json";
+		String updatedJson = coraClient.update("someType", "someId", json);
+		RestClientSpy restClient = restClientFactory.factored.get(0);
+		assertEquals(restClientFactory.factored.size(), 1);
+		assertEquals(restClientFactory.usedAuthToken, "someAuthTokenFromSpy");
+		assertEquals(restClient.updatedUsingRecordType, "someType");
+		assertEquals(restClient.updatedUsingRecordId, "someId");
+		assertEquals(restClient.updatedUsingJson, json);
+		assertEquals(updatedJson, restClient.returnedUpdatedAnswer);
+	}
+
+	@Test(expectedExceptions = CoraClientException.class)
+	public void testUpdateError() throws Exception {
+		String json = "some fake json";
+		coraClient.update(RestClientSpy.THIS_RECORD_TYPE_TRIGGERS_AN_ERROR, "someId", json);
+	}
+
 }

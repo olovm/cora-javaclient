@@ -24,4 +24,6 @@ public interface RestClient {
 
 	String createRecordFromJson(String recordType, String json);
 
+	String updateRecordFromJson(String recordType, String recordId, String json);
+
 }
