@@ -79,4 +79,10 @@ public class CoraClientImp implements CoraClient {
 		return restClient.updateRecordFromJson(recordType, recordId, json);
 	}
 
+	@Override
+	public String delete(String recordType, String recordId) {
+		RestClient restClient = setUpRestClientWithAuthoToken();
+		return restClient.deleteRecord(recordType, recordId);
+	}
+
 }

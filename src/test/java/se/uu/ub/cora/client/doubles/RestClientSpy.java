@@ -37,6 +37,10 @@ public class RestClientSpy implements RestClient {
 	public String updatedUsingJson;
 	public String returnedUpdatedAnswer = "Updated from RestClientSpy";
 
+	public String deletedUsingRecordType;
+	public String deletedUsingRecordId;
+	public String returnedDeletedAnswer = "Deleted from RestClientSpy";
+
 	@Override
 	public String readRecordAsJson(String recordType, String recordId) {
 		if (THIS_RECORD_TYPE_TRIGGERS_AN_ERROR.equals(recordType)) {
@@ -66,6 +70,13 @@ public class RestClientSpy implements RestClient {
 		updatedUsingRecordId = recordId;
 		updatedUsingJson = json;
 		return returnedUpdatedAnswer;
+	}
+
+	@Override
+	public String deleteRecord(String recordType, String recordId) {
+		deletedUsingRecordType = recordType;
+		deletedUsingRecordId = recordId;
+		return returnedDeletedAnswer;
 	}
 
 }

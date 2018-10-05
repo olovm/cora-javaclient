@@ -26,4 +26,6 @@ public interface RestClient {
 
 	String updateRecordFromJson(String recordType, String recordId, String json);
 
+	String deleteRecord(String recordType, String recordId);
+
 }

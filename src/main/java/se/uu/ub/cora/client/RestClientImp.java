@@ -113,4 +113,19 @@ public final class RestClientImp implements RestClient {
 				+ ". Returned error was: " + httpHandler.getErrorText());
 	}
 
+	@Override
+	public String deleteRecord(String recordType, String recordId) {
+		String url = baseUrl + recordType + "/" + recordId;
+		HttpHandler httpHandler = createHttpHandlerWithAuthTokenAndUrl(url);
+		httpHandler.setRequestMethod("DELETE");
+
+		Status statusType = Response.Status.fromStatusCode(httpHandler.getResponseCode());
+		if (statusType.equals(Response.Status.OK)) {
+			return httpHandler.getResponseText();
+		}
+		throw new CoraClientException("Could not delete record of type: " + recordType + " and id: "
+				+ recordId + " from server using url: " + url + ". Returned error was: "
+				+ httpHandler.getErrorText());
+	}
+
 }

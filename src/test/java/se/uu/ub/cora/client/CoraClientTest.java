@@ -111,4 +111,15 @@ public class CoraClientTest {
 		coraClient.update(RestClientSpy.THIS_RECORD_TYPE_TRIGGERS_AN_ERROR, "someId", json);
 	}
 
+	@Test
+	public void testDelete() {
+		String createdJson = coraClient.delete("someType", "someId");
+		RestClientSpy restClient = restClientFactory.factored.get(0);
+		assertEquals(restClientFactory.factored.size(), 1);
+		assertEquals(restClientFactory.usedAuthToken, "someAuthTokenFromSpy");
+		assertEquals(restClient.deletedUsingRecordType, "someType");
+		assertEquals(restClient.deletedUsingRecordId, "someId");
+		assertEquals(createdJson, restClient.returnedDeletedAnswer);
+	}
+
 }

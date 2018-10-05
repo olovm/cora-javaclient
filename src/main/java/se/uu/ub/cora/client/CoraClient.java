@@ -25,4 +25,6 @@ public interface CoraClient {
 
 	String update(String recordType, String recordId, String json);
 
+	String delete(String recordType, String recordId);
+
 }
