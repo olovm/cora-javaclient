@@ -38,10 +38,13 @@ public class CoraClientImp implements CoraClient {
 
 	@Override
 	public String create(String recordType, String json) {
-		String authToken = appTokenClient.getAuthToken();
-
-		RestClient restClient = restClientFactory.factorUsingAuthToken(authToken);
+		RestClient restClient = setUpRestClientWithAuthoToken();
 		return restClient.createRecordFromJson(recordType, json);
+	}
+
+	private RestClient setUpRestClientWithAuthoToken() {
+		String authToken = appTokenClient.getAuthToken();
+		return restClientFactory.factorUsingAuthToken(authToken);
 	}
 
 	AppTokenClientFactory getAppTokenClientFactory() {
@@ -62,6 +65,24 @@ public class CoraClientImp implements CoraClient {
 	String getAppToken() {
 		// needed for test
 		return appToken;
+	}
+
+	@Override
+	public String read(String recordType, String recordId) {
+		RestClient restClient = setUpRestClientWithAuthoToken();
+		return restClient.readRecordAsJson(recordType, recordId);
+	}
+
+	@Override
+	public String update(String recordType, String recordId, String json) {
+		RestClient restClient = setUpRestClientWithAuthoToken();
+		return restClient.updateRecordFromJson(recordType, recordId, json);
+	}
+
+	@Override
+	public String delete(String recordType, String recordId) {
+		RestClient restClient = setUpRestClientWithAuthoToken();
+		return restClient.deleteRecord(recordType, recordId);
 	}
 
 }

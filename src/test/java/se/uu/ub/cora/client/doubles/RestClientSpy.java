@@ -32,8 +32,20 @@ public class RestClientSpy implements RestClient {
 	public String createdUsingJson;
 	public String returnedCreatedAnswer = "Created from RestClientSpy";
 
+	public String updatedUsingRecordType;
+	public String updatedUsingRecordId;
+	public String updatedUsingJson;
+	public String returnedUpdatedAnswer = "Updated from RestClientSpy";
+
+	public String deletedUsingRecordType;
+	public String deletedUsingRecordId;
+	public String returnedDeletedAnswer = "Deleted from RestClientSpy";
+
 	@Override
 	public String readRecordAsJson(String recordType, String recordId) {
+		if (THIS_RECORD_TYPE_TRIGGERS_AN_ERROR.equals(recordType)) {
+			throw new CoraClientException("Error from RestClientSpy");
+		}
 		this.recordType = recordType;
 		this.recordId = recordId;
 		return returnedAnswer;
@@ -47,6 +59,24 @@ public class RestClientSpy implements RestClient {
 		createdUsingRecordType = recordType;
 		createdUsingJson = json;
 		return returnedCreatedAnswer;
+	}
+
+	@Override
+	public String updateRecordFromJson(String recordType, String recordId, String json) {
+		if (THIS_RECORD_TYPE_TRIGGERS_AN_ERROR.equals(recordType)) {
+			throw new CoraClientException("Error from RestClientSpy");
+		}
+		updatedUsingRecordType = recordType;
+		updatedUsingRecordId = recordId;
+		updatedUsingJson = json;
+		return returnedUpdatedAnswer;
+	}
+
+	@Override
+	public String deleteRecord(String recordType, String recordId) {
+		deletedUsingRecordType = recordType;
+		deletedUsingRecordId = recordId;
+		return returnedDeletedAnswer;
 	}
 
 }

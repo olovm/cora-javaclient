@@ -100,6 +100,64 @@ public class RestClientTest {
 		restClient.createRecordFromJson("someType", json);
 	}
 
+	@Test
+	public void testUpdateRecordHttpHandlerSetupCorrectly() throws Exception {
+		httpHandlerFactorySpy.setResponseCode(200);
+
+		String json = "{\"name\":\"value\"}";
+		restClient.updateRecordFromJson("someType", "someId", json);
+
+		assertEquals(getRequestMethod(), "POST");
+		assertEquals(httpHandlerFactorySpy.urlString,
+				"http://localhost:8080/therest/rest/record/someType/someId");
+		assertEquals(getRequestProperty("authToken"), "someToken");
+		assertEquals(getRequestProperty("Accept"), "application/vnd.uub.record+json");
+		assertEquals(getRequestProperty("Content-Type"), "application/vnd.uub.record+json");
+		assertEquals(getNumberOfRequestProperties(), 3);
+
+		assertEquals(getOutputString(), "{\"name\":\"value\"}");
+	}
+
+	@Test(expectedExceptions = CoraClientException.class, expectedExceptionsMessageRegExp = ""
+			+ "Could not update record of type: someType with recordId: someId on server using "
+			+ "url: http://localhost:8080/therest/rest/record/someType/someId. Returned error was: "
+			+ "bad things happened")
+	public void testUpdateRecordNotOk() throws Exception {
+		httpHandlerFactorySpy.changeFactoryToFactorInvalidHttpHandlers();
+		String json = "{\"name\":\"value\"}";
+		restClient.updateRecordFromJson("someType", "someId", json);
+	}
+
+	@Test
+	public void testDeleteRecordHttpHandlerSetupCorrectly() throws Exception {
+		httpHandlerFactorySpy.setResponseCode(200);
+
+		restClient.deleteRecord("someType", "someId");
+
+		assertEquals(getRequestMethod(), "DELETE");
+		assertEquals(httpHandlerFactorySpy.urlString,
+				"http://localhost:8080/therest/rest/record/someType/someId");
+		assertEquals(getRequestProperty("authToken"), "someToken");
+		assertEquals(getNumberOfRequestProperties(), 1);
+
+	}
+
+	@Test
+	public void testDeleteRecordOk() throws Exception {
+		httpHandlerFactorySpy.setResponseCode(200);
+		String returnedJson = restClient.deleteRecord("someType", "someId");
+		assertEquals(returnedJson, "Everything ok");
+	}
+
+	@Test(expectedExceptions = CoraClientException.class, expectedExceptionsMessageRegExp = ""
+			+ "Could not delete record of type: someType and id: someId from server using "
+			+ "url: http://localhost:8080/therest/rest/record/someType/someId. Returned error was: "
+			+ "bad things happened")
+	public void testDeleteRecordNotOk() {
+		httpHandlerFactorySpy.changeFactoryToFactorInvalidHttpHandlers();
+		restClient.deleteRecord("someType", "someId");
+	}
+
 	private String getOutputString() {
 		return httpHandlerFactorySpy.httpHandlerSpy.outputString;
 	}

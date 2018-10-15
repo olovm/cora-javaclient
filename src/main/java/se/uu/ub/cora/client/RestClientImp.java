@@ -26,6 +26,7 @@ import se.uu.ub.cora.httphandler.HttpHandlerFactory;
 
 public final class RestClientImp implements RestClient {
 	private static final int CREATED = 201;
+	private static final int OK = 200;
 	private static final String APPLICATION_UUB_RECORD_JSON = "application/vnd.uub.record+json";
 	private static final String ACCEPT = "Accept";
 	private HttpHandlerFactory httpHandlerFactory;
@@ -82,17 +83,49 @@ public final class RestClientImp implements RestClient {
 	@Override
 	public String createRecordFromJson(String recordType, String json) {
 		String url = baseUrl + recordType;
-		HttpHandler httpHandler = createHttpHandlerWithAuthTokenAndUrl(url);
-		httpHandler.setRequestProperty(ACCEPT, APPLICATION_UUB_RECORD_JSON);
-		httpHandler.setRequestProperty("Content-Type", APPLICATION_UUB_RECORD_JSON);
-		httpHandler.setRequestMethod("POST");
-		httpHandler.setOutput(json);
+		HttpHandler httpHandler = setUpHttpHandlerForPost(json, url);
 		if (CREATED == httpHandler.getResponseCode()) {
 			return httpHandler.getResponseText();
 		}
 		throw new CoraClientException(
 				"Could not create record of type: " + recordType + " on server using url: " + url
 						+ ". Returned error was: " + httpHandler.getErrorText());
+	}
+
+	private HttpHandler setUpHttpHandlerForPost(String json, String url) {
+		HttpHandler httpHandler = createHttpHandlerWithAuthTokenAndUrl(url);
+		httpHandler.setRequestProperty(ACCEPT, APPLICATION_UUB_RECORD_JSON);
+		httpHandler.setRequestProperty("Content-Type", APPLICATION_UUB_RECORD_JSON);
+		httpHandler.setRequestMethod("POST");
+		httpHandler.setOutput(json);
+		return httpHandler;
+	}
+
+	@Override
+	public String updateRecordFromJson(String recordType, String recordId, String json) {
+		String url = baseUrl + recordType + "/" + recordId;
+		HttpHandler httpHandler = setUpHttpHandlerForPost(json, url);
+		if (OK == httpHandler.getResponseCode()) {
+			return httpHandler.getResponseText();
+		}
+		throw new CoraClientException("Could not update record of type: " + recordType
+				+ " with recordId: " + recordId + " on server using url: " + url
+				+ ". Returned error was: " + httpHandler.getErrorText());
+	}
+
+	@Override
+	public String deleteRecord(String recordType, String recordId) {
+		String url = baseUrl + recordType + "/" + recordId;
+		HttpHandler httpHandler = createHttpHandlerWithAuthTokenAndUrl(url);
+		httpHandler.setRequestMethod("DELETE");
+
+		Status statusType = Response.Status.fromStatusCode(httpHandler.getResponseCode());
+		if (statusType.equals(Response.Status.OK)) {
+			return httpHandler.getResponseText();
+		}
+		throw new CoraClientException("Could not delete record of type: " + recordType + " and id: "
+				+ recordId + " from server using url: " + url + ". Returned error was: "
+				+ httpHandler.getErrorText());
 	}
 
 }
