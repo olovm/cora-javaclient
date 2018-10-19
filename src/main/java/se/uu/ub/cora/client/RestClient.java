@@ -28,4 +28,6 @@ public interface RestClient {
 
 	String deleteRecord(String recordType, String recordId);
 
+	String readRecordListAsJson(String recordType);
+
 }

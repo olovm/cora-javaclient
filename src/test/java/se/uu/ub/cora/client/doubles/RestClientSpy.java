@@ -28,6 +28,10 @@ public class RestClientSpy implements RestClient {
 	public String recordId;
 	public String returnedAnswer = "Answer from CoraRestClientSpy";
 
+	public String readListUsingRecordType;
+	public String readListUsingJson;
+	public String returnedListAnswer = "List answer from RestClientSpy";
+
 	public String createdUsingRecordType;
 	public String createdUsingJson;
 	public String returnedCreatedAnswer = "Created from RestClientSpy";
@@ -77,6 +81,15 @@ public class RestClientSpy implements RestClient {
 		deletedUsingRecordType = recordType;
 		deletedUsingRecordId = recordId;
 		return returnedDeletedAnswer;
+	}
+
+	@Override
+	public String readRecordListAsJson(String recordType) {
+		if (THIS_RECORD_TYPE_TRIGGERS_AN_ERROR.equals(recordType)) {
+			throw new CoraClientException("Error from RestClientSpy");
+		}
+		this.readListUsingRecordType = recordType;
+		return returnedListAnswer;
 	}
 
 }

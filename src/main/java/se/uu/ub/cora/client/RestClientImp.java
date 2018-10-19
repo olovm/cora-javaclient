@@ -128,4 +128,20 @@ public final class RestClientImp implements RestClient {
 				+ httpHandler.getErrorText());
 	}
 
+	@Override
+	public String readRecordListAsJson(String recordType) {
+		String url = baseUrl + recordType;
+		HttpHandler httpHandler = createHttpHandlerWithAuthTokenAndUrl(url);
+		httpHandler.setRequestMethod("GET");
+
+		Status statusType = Response.Status.fromStatusCode(httpHandler.getResponseCode());
+		if (statusType.equals(Response.Status.OK)) {
+			return httpHandler.getResponseText();
+		}
+		throw new CoraClientException(
+				"Could not read records of type: " + recordType + " from server using url: " + url
+						+ ". Returned error was: " + httpHandler.getErrorText());
+
+	}
+
 }

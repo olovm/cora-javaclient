@@ -65,6 +65,31 @@ public class RestClientTest {
 	}
 
 	@Test
+	public void testReadRecordListHttpHandlerSetupCorrectly() {
+		restClient.readRecordListAsJson("someType");
+		assertEquals(getRequestMethod(), "GET");
+		assertEquals(httpHandlerFactorySpy.urlString,
+				"http://localhost:8080/therest/rest/record/someType");
+		assertEquals(getRequestProperty("authToken"), "someToken");
+		assertEquals(getNumberOfRequestProperties(), 1);
+	}
+
+	@Test
+	public void testReadRecordListOk() {
+		String json = restClient.readRecordListAsJson("someType");
+		assertEquals(json, "Everything ok");
+	}
+
+	@Test(expectedExceptions = CoraClientException.class, expectedExceptionsMessageRegExp = ""
+			+ "Could not read records of type: someType from server using "
+			+ "url: http://localhost:8080/therest/rest/record/someType. Returned error was: "
+			+ "bad things happened")
+	public void testReadRecordListNotOk() {
+		httpHandlerFactorySpy.changeFactoryToFactorInvalidHttpHandlers();
+		restClient.readRecordListAsJson("someType");
+	}
+
+	@Test
 	public void testCreateRecordHttpHandlerSetupCorrectly() throws Exception {
 		httpHandlerFactorySpy.setResponseCode(201);
 

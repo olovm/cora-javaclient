@@ -75,6 +75,21 @@ public class CoraClientTest {
 	}
 
 	@Test
+	public void testReadList() throws Exception {
+		String readListJson = coraClient.readList("someType");
+		RestClientSpy restClient = restClientFactory.factored.get(0);
+		assertEquals(restClientFactory.factored.size(), 1);
+		assertEquals(restClientFactory.usedAuthToken, "someAuthTokenFromSpy");
+		assertEquals(restClient.readListUsingRecordType, "someType");
+		assertEquals(readListJson, restClient.returnedListAnswer);
+	}
+
+	@Test(expectedExceptions = CoraClientException.class)
+	public void testReadListError() throws Exception {
+		coraClient.readList(RestClientSpy.THIS_RECORD_TYPE_TRIGGERS_AN_ERROR);
+	}
+
+	@Test
 	public void testCreate() throws Exception {
 		String json = "some fake json";
 		String createdJson = coraClient.create("someType", json);

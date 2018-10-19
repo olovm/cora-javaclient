@@ -27,4 +27,6 @@ public interface CoraClient {
 
 	String delete(String recordType, String recordId);
 
+	String readList(String recordType);
+
 }
