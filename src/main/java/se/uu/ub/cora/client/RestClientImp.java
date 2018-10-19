@@ -25,6 +25,8 @@ import se.uu.ub.cora.httphandler.HttpHandler;
 import se.uu.ub.cora.httphandler.HttpHandlerFactory;
 
 public final class RestClientImp implements RestClient {
+	private static final String RETURNED_ERROR_WAS = ". Returned error was: ";
+	private static final String FROM_SERVER_USING_URL = " from server using url: ";
 	private static final int CREATED = 201;
 	private static final int OK = 200;
 	private static final String APPLICATION_UUB_RECORD_JSON = "application/vnd.uub.record+json";
@@ -55,7 +57,7 @@ public final class RestClientImp implements RestClient {
 			return httpHandler.getResponseText();
 		}
 		throw new CoraClientException("Could not read record of type: " + recordType + " and id: "
-				+ recordId + " from server using url: " + url + ". Returned error was: "
+				+ recordId + FROM_SERVER_USING_URL + url + RETURNED_ERROR_WAS
 				+ httpHandler.getErrorText());
 	}
 
@@ -87,9 +89,8 @@ public final class RestClientImp implements RestClient {
 		if (CREATED == httpHandler.getResponseCode()) {
 			return httpHandler.getResponseText();
 		}
-		throw new CoraClientException(
-				"Could not create record of type: " + recordType + " on server using url: " + url
-						+ ". Returned error was: " + httpHandler.getErrorText());
+		throw new CoraClientException("Could not create record of type: " + recordType
+				+ FROM_SERVER_USING_URL + url + RETURNED_ERROR_WAS + httpHandler.getErrorText());
 	}
 
 	private HttpHandler setUpHttpHandlerForPost(String json, String url) {
@@ -110,7 +111,7 @@ public final class RestClientImp implements RestClient {
 		}
 		throw new CoraClientException("Could not update record of type: " + recordType
 				+ " with recordId: " + recordId + " on server using url: " + url
-				+ ". Returned error was: " + httpHandler.getErrorText());
+				+ RETURNED_ERROR_WAS + httpHandler.getErrorText());
 	}
 
 	@Override
@@ -124,7 +125,7 @@ public final class RestClientImp implements RestClient {
 			return httpHandler.getResponseText();
 		}
 		throw new CoraClientException("Could not delete record of type: " + recordType + " and id: "
-				+ recordId + " from server using url: " + url + ". Returned error was: "
+				+ recordId + FROM_SERVER_USING_URL + url + RETURNED_ERROR_WAS
 				+ httpHandler.getErrorText());
 	}
 
@@ -138,9 +139,8 @@ public final class RestClientImp implements RestClient {
 		if (statusType.equals(Response.Status.OK)) {
 			return httpHandler.getResponseText();
 		}
-		throw new CoraClientException(
-				"Could not read records of type: " + recordType + " from server using url: " + url
-						+ ". Returned error was: " + httpHandler.getErrorText());
+		throw new CoraClientException("Could not read records of type: " + recordType
+				+ FROM_SERVER_USING_URL + url + RETURNED_ERROR_WAS + httpHandler.getErrorText());
 
 	}
 

@@ -116,7 +116,7 @@ public class RestClientTest {
 	}
 
 	@Test(expectedExceptions = CoraClientException.class, expectedExceptionsMessageRegExp = ""
-			+ "Could not create record of type: someType on server using "
+			+ "Could not create record of type: someType from server using "
 			+ "url: http://localhost:8080/therest/rest/record/someType. Returned error was: "
 			+ "bad things happened")
 	public void testCreateRecordNotOk() throws Exception {
