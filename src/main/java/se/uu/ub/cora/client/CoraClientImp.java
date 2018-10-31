@@ -91,4 +91,10 @@ public class CoraClientImp implements CoraClient {
 		return restClient.readRecordListAsJson(recordType);
 	}
 
+	@Override
+	public String readIncomLinks(String recordType, String recordId) {
+		RestClient restClient = setUpRestClientWithAuthoToken();
+		return restClient.readIncomingLinksAsJson(recordType, recordId);
+	}
+
 }

@@ -23,27 +23,12 @@ import se.uu.ub.cora.client.RestClient;
 
 public class RestClientSpy implements RestClient {
 
+	public String returnedAnswer = "Answer from CoraRestClientSpy ";
 	public static final String THIS_RECORD_TYPE_TRIGGERS_AN_ERROR = "thisRecordTypeTriggersAnError";
 	public String recordType;
 	public String recordId;
-	public String returnedAnswer = "Answer from CoraRestClientSpy";
-
-	public String readListUsingRecordType;
-	public String readListUsingJson;
-	public String returnedListAnswer = "List answer from RestClientSpy";
-
-	public String createdUsingRecordType;
-	public String createdUsingJson;
-	public String returnedCreatedAnswer = "Created from RestClientSpy";
-
-	public String updatedUsingRecordType;
-	public String updatedUsingRecordId;
-	public String updatedUsingJson;
-	public String returnedUpdatedAnswer = "Updated from RestClientSpy";
-
-	public String deletedUsingRecordType;
-	public String deletedUsingRecordId;
-	public String returnedDeletedAnswer = "Deleted from RestClientSpy";
+	public String json;
+	public String methodCalled;
 
 	@Override
 	public String readRecordAsJson(String recordType, String recordId) {
@@ -52,7 +37,8 @@ public class RestClientSpy implements RestClient {
 		}
 		this.recordType = recordType;
 		this.recordId = recordId;
-		return returnedAnswer;
+		methodCalled = "read";
+		return returnedAnswer + methodCalled;
 	}
 
 	@Override
@@ -60,9 +46,10 @@ public class RestClientSpy implements RestClient {
 		if (THIS_RECORD_TYPE_TRIGGERS_AN_ERROR.equals(recordType)) {
 			throw new CoraClientException("Error from RestClientSpy");
 		}
-		createdUsingRecordType = recordType;
-		createdUsingJson = json;
-		return returnedCreatedAnswer;
+		this.recordType = recordType;
+		this.json = json;
+		methodCalled = "create";
+		return returnedAnswer + methodCalled;
 	}
 
 	@Override
@@ -70,17 +57,22 @@ public class RestClientSpy implements RestClient {
 		if (THIS_RECORD_TYPE_TRIGGERS_AN_ERROR.equals(recordType)) {
 			throw new CoraClientException("Error from RestClientSpy");
 		}
-		updatedUsingRecordType = recordType;
-		updatedUsingRecordId = recordId;
-		updatedUsingJson = json;
-		return returnedUpdatedAnswer;
+		this.recordType = recordType;
+		this.recordId = recordId;
+		this.json = json;
+		methodCalled = "update";
+		return returnedAnswer + methodCalled;
 	}
 
 	@Override
 	public String deleteRecord(String recordType, String recordId) {
-		deletedUsingRecordType = recordType;
-		deletedUsingRecordId = recordId;
-		return returnedDeletedAnswer;
+		if (THIS_RECORD_TYPE_TRIGGERS_AN_ERROR.equals(recordType)) {
+			throw new CoraClientException("Error from RestClientSpy");
+		}
+		this.recordType = recordType;
+		this.recordId = recordId;
+		methodCalled = "delete";
+		return returnedAnswer + methodCalled;
 	}
 
 	@Override
@@ -88,14 +80,20 @@ public class RestClientSpy implements RestClient {
 		if (THIS_RECORD_TYPE_TRIGGERS_AN_ERROR.equals(recordType)) {
 			throw new CoraClientException("Error from RestClientSpy");
 		}
-		this.readListUsingRecordType = recordType;
-		return returnedListAnswer;
+		this.recordType = recordType;
+		methodCalled = "readList";
+		return returnedAnswer + methodCalled;
 	}
 
 	@Override
 	public String readIncomingLinksAsJson(String recordType, String recordId) {
-		// TODO Auto-generated method stub
-		return "";
+		if (THIS_RECORD_TYPE_TRIGGERS_AN_ERROR.equals(recordType)) {
+			throw new CoraClientException("Error from RestClientSpy");
+		}
+		this.recordType = recordType;
+		this.recordId = recordId;
+		methodCalled = "readincomingLinks";
+		return returnedAnswer + methodCalled;
 	}
 
 }
