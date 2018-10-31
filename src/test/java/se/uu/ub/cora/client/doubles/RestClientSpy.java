@@ -92,4 +92,10 @@ public class RestClientSpy implements RestClient {
 		return returnedListAnswer;
 	}
 
+	@Override
+	public String readIncomingLinksAsJson(String recordType, String recordId) {
+		// TODO Auto-generated method stub
+		return "";
+	}
+
 }

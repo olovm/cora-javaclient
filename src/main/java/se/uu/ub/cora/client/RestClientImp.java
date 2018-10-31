@@ -144,4 +144,19 @@ public final class RestClientImp implements RestClient {
 
 	}
 
+	@Override
+	public String readIncomingLinksAsJson(String recordType, String recordId) {
+		String url = baseUrl + recordType + "/" + recordId + "/incomingLinks";
+		HttpHandler httpHandler = createHttpHandlerWithAuthTokenAndUrl(url);
+		httpHandler.setRequestMethod("GET");
+		Status statusType = Response.Status.fromStatusCode(httpHandler.getResponseCode());
+
+		if (statusType.equals(Response.Status.OK)) {
+			return httpHandler.getResponseText();
+		}
+		throw new CoraClientException("Could not read incoming links of type: " + recordType
+				+ FROM_SERVER_USING_URL + url + RETURNED_ERROR_WAS + httpHandler.getErrorText());
+
+	}
+
 }
