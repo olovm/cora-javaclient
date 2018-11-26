@@ -29,6 +29,6 @@ public interface CoraClient {
 
 	String readList(String recordType);
 
-	String readIncomLinks(String recordType, String recordId);
+	String readIncomingLinks(String recordType, String recordId);
 
 }

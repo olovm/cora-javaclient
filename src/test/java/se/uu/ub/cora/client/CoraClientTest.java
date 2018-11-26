@@ -150,7 +150,7 @@ public class CoraClientTest {
 
 	@Test
 	public void testReadIncomingLinks() throws Exception {
-		String readLinksJson = coraClient.readIncomLinks("someType", "someId");
+		String readLinksJson = coraClient.readIncomingLinks("someType", "someId");
 		RestClientSpy restClient = restClientFactory.factored.get(0);
 		assertEquals(restClientFactory.factored.size(), 1);
 		assertEquals(restClientFactory.usedAuthToken, "someAuthTokenFromSpy");
@@ -162,6 +162,6 @@ public class CoraClientTest {
 
 	@Test(expectedExceptions = CoraClientException.class)
 	public void testReadincomingLInksError() throws Exception {
-		coraClient.readIncomLinks(RestClientSpy.THIS_RECORD_TYPE_TRIGGERS_AN_ERROR, "someId");
+		coraClient.readIncomingLinks(RestClientSpy.THIS_RECORD_TYPE_TRIGGERS_AN_ERROR, "someId");
 	}
 }
