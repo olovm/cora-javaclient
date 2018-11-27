@@ -30,4 +30,6 @@ public interface RestClient {
 
 	String readRecordListAsJson(String recordType);
 
+	String readIncomingLinksAsJson(String recordType, String recordId);
+
 }

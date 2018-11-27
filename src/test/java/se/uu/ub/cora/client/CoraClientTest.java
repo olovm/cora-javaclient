@@ -66,7 +66,9 @@ public class CoraClientTest {
 		assertEquals(restClientFactory.usedAuthToken, "someAuthTokenFromSpy");
 		assertEquals(restClient.recordType, "someType");
 		assertEquals(restClient.recordId, "someId");
-		assertEquals(readJson, restClient.returnedAnswer);
+		assertEquals(readJson, restClient.returnedAnswer + restClient.methodCalled);
+		assertEquals(restClient.methodCalled, "read");
+
 	}
 
 	@Test(expectedExceptions = CoraClientException.class)
@@ -80,8 +82,9 @@ public class CoraClientTest {
 		RestClientSpy restClient = restClientFactory.factored.get(0);
 		assertEquals(restClientFactory.factored.size(), 1);
 		assertEquals(restClientFactory.usedAuthToken, "someAuthTokenFromSpy");
-		assertEquals(restClient.readListUsingRecordType, "someType");
-		assertEquals(readListJson, restClient.returnedListAnswer);
+		assertEquals(restClient.recordType, "someType");
+		assertEquals(readListJson, restClient.returnedAnswer + restClient.methodCalled);
+		assertEquals(restClient.methodCalled, "readList");
 	}
 
 	@Test(expectedExceptions = CoraClientException.class)
@@ -96,9 +99,10 @@ public class CoraClientTest {
 		RestClientSpy restClient = restClientFactory.factored.get(0);
 		assertEquals(restClientFactory.factored.size(), 1);
 		assertEquals(restClientFactory.usedAuthToken, "someAuthTokenFromSpy");
-		assertEquals(restClient.createdUsingRecordType, "someType");
-		assertEquals(restClient.createdUsingJson, json);
-		assertEquals(createdJson, restClient.returnedCreatedAnswer);
+		assertEquals(restClient.recordType, "someType");
+		assertEquals(restClient.json, json);
+		assertEquals(createdJson, restClient.returnedAnswer + restClient.methodCalled);
+		assertEquals(restClient.methodCalled, "create");
 	}
 
 	@Test(expectedExceptions = CoraClientException.class)
@@ -114,10 +118,11 @@ public class CoraClientTest {
 		RestClientSpy restClient = restClientFactory.factored.get(0);
 		assertEquals(restClientFactory.factored.size(), 1);
 		assertEquals(restClientFactory.usedAuthToken, "someAuthTokenFromSpy");
-		assertEquals(restClient.updatedUsingRecordType, "someType");
-		assertEquals(restClient.updatedUsingRecordId, "someId");
-		assertEquals(restClient.updatedUsingJson, json);
-		assertEquals(updatedJson, restClient.returnedUpdatedAnswer);
+		assertEquals(restClient.recordType, "someType");
+		assertEquals(restClient.recordId, "someId");
+		assertEquals(restClient.json, json);
+		assertEquals(updatedJson, restClient.returnedAnswer + restClient.methodCalled);
+		assertEquals(restClient.methodCalled, "update");
 	}
 
 	@Test(expectedExceptions = CoraClientException.class)
@@ -132,9 +137,31 @@ public class CoraClientTest {
 		RestClientSpy restClient = restClientFactory.factored.get(0);
 		assertEquals(restClientFactory.factored.size(), 1);
 		assertEquals(restClientFactory.usedAuthToken, "someAuthTokenFromSpy");
-		assertEquals(restClient.deletedUsingRecordType, "someType");
-		assertEquals(restClient.deletedUsingRecordId, "someId");
-		assertEquals(createdJson, restClient.returnedDeletedAnswer);
+		assertEquals(restClient.recordType, "someType");
+		assertEquals(restClient.recordId, "someId");
+		assertEquals(createdJson, restClient.returnedAnswer + restClient.methodCalled);
+		assertEquals(restClient.methodCalled, "delete");
 	}
 
+	@Test(expectedExceptions = CoraClientException.class)
+	public void testDeleteError() throws Exception {
+		coraClient.delete(RestClientSpy.THIS_RECORD_TYPE_TRIGGERS_AN_ERROR, "someId");
+	}
+
+	@Test
+	public void testReadIncomingLinks() throws Exception {
+		String readLinksJson = coraClient.readIncomingLinks("someType", "someId");
+		RestClientSpy restClient = restClientFactory.factored.get(0);
+		assertEquals(restClientFactory.factored.size(), 1);
+		assertEquals(restClientFactory.usedAuthToken, "someAuthTokenFromSpy");
+		assertEquals(restClient.recordType, "someType");
+		assertEquals(restClient.recordId, "someId");
+		assertEquals(readLinksJson, restClient.returnedAnswer + restClient.methodCalled);
+		assertEquals(restClient.methodCalled, "readincomingLinks");
+	}
+
+	@Test(expectedExceptions = CoraClientException.class)
+	public void testReadincomingLInksError() throws Exception {
+		coraClient.readIncomingLinks(RestClientSpy.THIS_RECORD_TYPE_TRIGGERS_AN_ERROR, "someId");
+	}
 }
