@@ -183,6 +183,31 @@ public class RestClientTest {
 		restClient.deleteRecord("someType", "someId");
 	}
 
+	@Test
+	public void testReadIncomingLinksHttpHandlerSetupCorrectly() {
+		restClient.readIncomingLinksAsJson("someType", "someId");
+		assertEquals(getRequestMethod(), "GET");
+		assertEquals(httpHandlerFactorySpy.urlString,
+				"http://localhost:8080/therest/rest/record/someType/someId/incomingLinks");
+		assertEquals(getRequestProperty("authToken"), "someToken");
+		assertEquals(getNumberOfRequestProperties(), 1);
+	}
+
+	@Test
+	public void testReadIncomingLinksOk() {
+		String json = restClient.readIncomingLinksAsJson("someType", "someId");
+		assertEquals(json, "Everything ok");
+	}
+
+	@Test(expectedExceptions = CoraClientException.class, expectedExceptionsMessageRegExp = "Could not read "
+			+ "incoming links of type: someType from server using "
+			+ "url: http://localhost:8080/therest/rest/record/someType/someId/incomingLinks. "
+			+ "Returned error was: bad things happened")
+	public void testReadIncomingLinksNotOk() {
+		httpHandlerFactorySpy.changeFactoryToFactorInvalidHttpHandlers();
+		restClient.readIncomingLinksAsJson("someType", "someId");
+	}
+
 	private String getOutputString() {
 		return httpHandlerFactorySpy.httpHandlerSpy.outputString;
 	}
