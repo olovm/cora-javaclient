@@ -54,6 +54,12 @@ public class CoraClientImp implements CoraClient {
 		return restClientFactory.factorUsingAuthToken(authToken);
 	}
 
+	@Override
+	public String create(String recordType, ClientDataGroup dataGroup) {
+		create(recordType, "");
+		return null;
+	}
+
 	public AppTokenClientFactory getAppTokenClientFactory() {
 		// needed for test
 		return appTokenClientFactory;
@@ -102,12 +108,6 @@ public class CoraClientImp implements CoraClient {
 	public String readIncomingLinks(String recordType, String recordId) {
 		RestClient restClient = setUpRestClientWithAuthToken();
 		return restClient.readIncomingLinksAsJson(recordType, recordId);
-	}
-
-	@Override
-	public String create(String recordType, ClientDataGroup dataGroup) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

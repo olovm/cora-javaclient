@@ -23,6 +23,7 @@ import static org.testng.Assert.assertEquals;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.javaclient.cora.CoraClient;
 import se.uu.ub.cora.javaclient.cora.CoraClientException;
 import se.uu.ub.cora.javaclient.doubles.AppTokenClientFactorySpy;
@@ -111,6 +112,22 @@ public class CoraClientTest {
 	public void testCreateError() throws Exception {
 		String json = "some fake json";
 		coraClient.create(RestClientSpy.THIS_RECORD_TYPE_TRIGGERS_AN_ERROR, json);
+	}
+
+	@Test
+	public void testCreateFromClientDataGroup() throws Exception {
+		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("someDataGroup");
+
+		// String json = "some fake json";
+		String createdJson = coraClient.create("someType", dataGroup);
+
+		RestClientSpy restClient = restClientFactory.factored.get(0);
+		assertEquals(restClientFactory.factored.size(), 1);
+		assertEquals(restClientFactory.usedAuthToken, "someAuthTokenFromSpy");
+		assertEquals(restClient.recordType, "someType");
+		// assertEquals(restClient.json, json);
+		// assertEquals(createdJson, restClient.returnedAnswer + restClient.methodCalled);
+		assertEquals(restClient.methodCalled, "create");
 	}
 
 	@Test
