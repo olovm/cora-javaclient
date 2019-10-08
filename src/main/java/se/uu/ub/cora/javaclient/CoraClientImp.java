@@ -20,11 +20,15 @@
 package se.uu.ub.cora.javaclient;
 
 import se.uu.ub.cora.clientdata.ClientDataGroup;
+import se.uu.ub.cora.clientdata.converter.javatojson.DataToJsonConverter;
+import se.uu.ub.cora.clientdata.converter.javatojson.DataToJsonConverterFactory;
 import se.uu.ub.cora.javaclient.apptoken.AppTokenClient;
 import se.uu.ub.cora.javaclient.apptoken.AppTokenClientFactory;
 import se.uu.ub.cora.javaclient.cora.CoraClient;
 import se.uu.ub.cora.javaclient.rest.RestClient;
 import se.uu.ub.cora.javaclient.rest.RestClientFactory;
+import se.uu.ub.cora.json.builder.JsonBuilderFactory;
+import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
 
 public class CoraClientImp implements CoraClient {
 
@@ -33,11 +37,14 @@ public class CoraClientImp implements CoraClient {
 	private AppTokenClientFactory appTokenClientFactory;
 	private String userId;
 	private String appToken;
+	private DataToJsonConverterFactory dataToJsonConverterFactory;
 
 	public CoraClientImp(AppTokenClientFactory appTokenClientFactory,
-			RestClientFactory restClientFactory, String userId, String appToken) {
+			RestClientFactory restClientFactory,
+			DataToJsonConverterFactory dataToJsonConverterFactory, String userId, String appToken) {
 		this.appTokenClientFactory = appTokenClientFactory;
 		this.restClientFactory = restClientFactory;
+		this.dataToJsonConverterFactory = dataToJsonConverterFactory;
 		this.userId = userId;
 		this.appToken = appToken;
 		appTokenClient = appTokenClientFactory.factor(userId, appToken);
@@ -56,8 +63,15 @@ public class CoraClientImp implements CoraClient {
 
 	@Override
 	public String create(String recordType, ClientDataGroup dataGroup) {
-		create(recordType, "");
-		return null;
+		DataToJsonConverter converter = createConverter(dataGroup);
+		String json = converter.toJson();
+		return create(recordType, json);
+	}
+
+	private DataToJsonConverter createConverter(ClientDataGroup dataGroup) {
+		JsonBuilderFactory factory = new OrgJsonBuilderFactoryAdapter();
+		return dataToJsonConverterFactory
+				.createForClientDataElement(factory, dataGroup);
 	}
 
 	public AppTokenClientFactory getAppTokenClientFactory() {

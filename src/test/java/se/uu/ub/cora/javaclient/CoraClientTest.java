@@ -19,6 +19,8 @@
 package se.uu.ub.cora.javaclient;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertSame;
+import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -29,6 +31,7 @@ import se.uu.ub.cora.javaclient.cora.CoraClientException;
 import se.uu.ub.cora.javaclient.doubles.AppTokenClientFactorySpy;
 import se.uu.ub.cora.javaclient.doubles.RestClientFactorySpy;
 import se.uu.ub.cora.javaclient.doubles.RestClientSpy;
+import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
 
 public class CoraClientTest {
 	private CoraClient coraClient;
@@ -36,12 +39,15 @@ public class CoraClientTest {
 	private AppTokenClientFactorySpy appTokenClientFactory;
 	private String userId = "someUserId";
 	private String appToken = "someAppToken";
+	private DataToJsonConverterFactorySpy dataToJsonConverterFactory;
 
 	@BeforeMethod
 	public void BeforeMethod() {
 		restClientFactory = new RestClientFactorySpy();
 		appTokenClientFactory = new AppTokenClientFactorySpy();
-		coraClient = new CoraClientImp(appTokenClientFactory, restClientFactory, userId, appToken);
+		dataToJsonConverterFactory = new DataToJsonConverterFactorySpy();
+		coraClient = new CoraClientImp(appTokenClientFactory, restClientFactory,
+				dataToJsonConverterFactory, userId, appToken);
 	}
 
 	@Test
@@ -56,7 +62,8 @@ public class CoraClientTest {
 	@Test(expectedExceptions = CoraClientException.class)
 	public void testInitErrorWithAuthToken() throws Exception {
 		CoraClientImp coraClient = new CoraClientImp(appTokenClientFactory, restClientFactory,
-				AppTokenClientFactorySpy.THIS_USER_ID_TRIGGERS_AN_ERROR, appToken);
+				dataToJsonConverterFactory, AppTokenClientFactorySpy.THIS_USER_ID_TRIGGERS_AN_ERROR,
+				appToken);
 		String json = "some fake json";
 		coraClient.create("someType", json);
 	}
@@ -118,16 +125,21 @@ public class CoraClientTest {
 	public void testCreateFromClientDataGroup() throws Exception {
 		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("someDataGroup");
 
-		// String json = "some fake json";
 		String createdJson = coraClient.create("someType", dataGroup);
+
+		assertTrue(dataToJsonConverterFactory.factory instanceof OrgJsonBuilderFactoryAdapter);
+		assertSame(dataToJsonConverterFactory.clientDataElement, dataGroup);
 
 		RestClientSpy restClient = restClientFactory.factored.get(0);
 		assertEquals(restClientFactory.factored.size(), 1);
 		assertEquals(restClientFactory.usedAuthToken, "someAuthTokenFromSpy");
 		assertEquals(restClient.recordType, "someType");
-		// assertEquals(restClient.json, json);
-		// assertEquals(createdJson, restClient.returnedAnswer + restClient.methodCalled);
 		assertEquals(restClient.methodCalled, "create");
+
+		String jsonReturnedFromConverter = dataToJsonConverterFactory.converterSpy.jsonToReturnFromSpy;
+		assertEquals(restClient.json, jsonReturnedFromConverter);
+		assertEquals(createdJson, restClient.returnedAnswer + restClient.methodCalled);
+
 	}
 
 	@Test
