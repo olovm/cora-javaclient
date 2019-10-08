@@ -18,8 +18,8 @@
  */
 package se.uu.ub.cora.javaclient.doubles;
 
-import se.uu.ub.cora.javaclient.CoraClientException;
-import se.uu.ub.cora.javaclient.RestClient;
+import se.uu.ub.cora.javaclient.cora.CoraClientException;
+import se.uu.ub.cora.javaclient.rest.RestClient;
 
 public class RestClientSpy implements RestClient {
 

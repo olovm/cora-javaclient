@@ -16,12 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.javaclient;
+package se.uu.ub.cora.javaclient.cora;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import se.uu.ub.cora.javaclient.CoraClientException;
 
 public class CoraClientExceptionTest {
 	@Test

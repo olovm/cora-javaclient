@@ -16,26 +16,14 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.javaclient;
+package se.uu.ub.cora.javaclient.cora;
 
-import se.uu.ub.cora.httphandler.HttpHandlerFactory;
-import se.uu.ub.cora.httphandler.HttpHandlerFactoryImp;
+public class CoraClientException extends RuntimeException {
 
-public class AppTokenClientFactoryImp implements AppTokenClientFactory {
+	private static final long serialVersionUID = -3141384493591308355L;
 
-	private String appTokenVerifierUrl;
-
-	public AppTokenClientFactoryImp(String appTokenVerifierUrl) {
-		this.appTokenVerifierUrl = appTokenVerifierUrl;
-	}
-
-	@Override
-	public AppTokenClient factor(String userId, String appToken) {
-		HttpHandlerFactory httpHandlerFactory = new HttpHandlerFactoryImp();
-		AppTokenClientCredentials credentials = new AppTokenClientCredentials(appTokenVerifierUrl,
-				userId, appToken);
-		return AppTokenClientImp.usingHttpHandlerFactoryAndCredentials(
-				httpHandlerFactory, credentials);
+	public CoraClientException(String message) {
+		super(message);
 	}
 
 }

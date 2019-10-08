@@ -16,14 +16,20 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.javaclient;
+package se.uu.ub.cora.javaclient.rest;
 
-public class CoraClientException extends RuntimeException {
+public interface RestClient {
 
-	private static final long serialVersionUID = -3141384493591308355L;
+	String readRecordAsJson(String recordType, String recordId);
 
-	public CoraClientException(String message) {
-		super(message);
-	}
+	String createRecordFromJson(String recordType, String json);
+
+	String updateRecordFromJson(String recordType, String recordId, String json);
+
+	String deleteRecord(String recordType, String recordId);
+
+	String readRecordListAsJson(String recordType);
+
+	String readIncomingLinksAsJson(String recordType, String recordId);
 
 }

@@ -18,8 +18,8 @@
  */
 package se.uu.ub.cora.javaclient.doubles;
 
-import se.uu.ub.cora.javaclient.AppTokenClient;
-import se.uu.ub.cora.javaclient.CoraClientException;
+import se.uu.ub.cora.javaclient.apptoken.AppTokenClient;
+import se.uu.ub.cora.javaclient.cora.CoraClientException;
 
 public class AppTokenClientThrowsErrorSpy implements AppTokenClient {
 

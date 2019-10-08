@@ -23,10 +23,8 @@ import static org.testng.Assert.assertEquals;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.javaclient.AppTokenClient;
-import se.uu.ub.cora.javaclient.AppTokenClientCredentials;
-import se.uu.ub.cora.javaclient.AppTokenClientImp;
-import se.uu.ub.cora.javaclient.CoraClientException;
+import se.uu.ub.cora.javaclient.apptoken.AppTokenClient;
+import se.uu.ub.cora.javaclient.cora.CoraClientException;
 import se.uu.ub.cora.javaclient.externaldependenciesdoubles.HttpHandlerFactorySpy;
 
 public class AppTokenClientTest {

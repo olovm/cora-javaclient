@@ -18,7 +18,7 @@
  */
 package se.uu.ub.cora.javaclient.doubles;
 
-import se.uu.ub.cora.javaclient.AppTokenClient;
+import se.uu.ub.cora.javaclient.apptoken.AppTokenClient;
 
 public class AppTokenClientSpy implements AppTokenClient {
 

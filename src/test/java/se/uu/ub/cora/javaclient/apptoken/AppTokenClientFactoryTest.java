@@ -16,7 +16,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.javaclient;
+package se.uu.ub.cora.javaclient.apptoken;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -26,8 +26,6 @@ import org.testng.annotations.Test;
 
 import se.uu.ub.cora.httphandler.HttpHandlerFactory;
 import se.uu.ub.cora.httphandler.HttpHandlerFactoryImp;
-import se.uu.ub.cora.javaclient.AppTokenClientFactory;
-import se.uu.ub.cora.javaclient.AppTokenClientFactoryImp;
 import se.uu.ub.cora.javaclient.AppTokenClientImp;
 
 public class AppTokenClientFactoryTest {

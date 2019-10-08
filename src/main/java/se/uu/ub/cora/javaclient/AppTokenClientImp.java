@@ -20,6 +20,8 @@ package se.uu.ub.cora.javaclient;
 
 import se.uu.ub.cora.httphandler.HttpHandler;
 import se.uu.ub.cora.httphandler.HttpHandlerFactory;
+import se.uu.ub.cora.javaclient.apptoken.AppTokenClient;
+import se.uu.ub.cora.javaclient.cora.CoraClientException;
 
 public final class AppTokenClientImp implements AppTokenClient {
 
@@ -81,22 +83,22 @@ public final class AppTokenClientImp implements AppTokenClient {
 		return responseText.substring(idIndex, responseText.indexOf('"', idIndex));
 	}
 
-	HttpHandlerFactory getHttpHandlerFactory() {
+	public HttpHandlerFactory getHttpHandlerFactory() {
 		// needed for test
 		return httpHandlerFactory;
 	}
 
-	String getAppTokenVerifierUrl() {
+	public String getAppTokenVerifierUrl() {
 		// needed for test
 		return appTokenVerifierUrl;
 	}
 
-	String getUserId() {
+	public String getUserId() {
 		// needed for test
 		return userId;
 	}
 
-	String getAppToken() {
+	public String getAppToken() {
 		// needed for test
 		return appToken;
 	}
