@@ -23,9 +23,8 @@ import static org.testng.Assert.assertEquals;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.javaclient.CoraClient;
-import se.uu.ub.cora.javaclient.CoraClientException;
-import se.uu.ub.cora.javaclient.CoraClientImp;
+import se.uu.ub.cora.javaclient.cora.CoraClient;
+import se.uu.ub.cora.javaclient.cora.CoraClientException;
 import se.uu.ub.cora.javaclient.doubles.AppTokenClientFactorySpy;
 import se.uu.ub.cora.javaclient.doubles.RestClientFactorySpy;
 import se.uu.ub.cora.javaclient.doubles.RestClientSpy;

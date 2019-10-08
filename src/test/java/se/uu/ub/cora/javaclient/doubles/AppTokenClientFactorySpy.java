@@ -21,8 +21,8 @@ package se.uu.ub.cora.javaclient.doubles;
 import java.util.ArrayList;
 import java.util.List;
 
-import se.uu.ub.cora.javaclient.AppTokenClient;
-import se.uu.ub.cora.javaclient.AppTokenClientFactory;
+import se.uu.ub.cora.javaclient.apptoken.AppTokenClient;
+import se.uu.ub.cora.javaclient.apptoken.AppTokenClientFactory;
 
 public class AppTokenClientFactorySpy implements AppTokenClientFactory {
 

@@ -19,6 +19,13 @@
 
 package se.uu.ub.cora.javaclient;
 
+import se.uu.ub.cora.clientdata.ClientDataGroup;
+import se.uu.ub.cora.javaclient.apptoken.AppTokenClient;
+import se.uu.ub.cora.javaclient.apptoken.AppTokenClientFactory;
+import se.uu.ub.cora.javaclient.cora.CoraClient;
+import se.uu.ub.cora.javaclient.rest.RestClient;
+import se.uu.ub.cora.javaclient.rest.RestClientFactory;
+
 public class CoraClientImp implements CoraClient {
 
 	private RestClientFactory restClientFactory;
@@ -38,63 +45,69 @@ public class CoraClientImp implements CoraClient {
 
 	@Override
 	public String create(String recordType, String json) {
-		RestClient restClient = setUpRestClientWithAuthoToken();
+		RestClient restClient = setUpRestClientWithAuthToken();
 		return restClient.createRecordFromJson(recordType, json);
 	}
 
-	private RestClient setUpRestClientWithAuthoToken() {
+	private RestClient setUpRestClientWithAuthToken() {
 		String authToken = appTokenClient.getAuthToken();
 		return restClientFactory.factorUsingAuthToken(authToken);
 	}
 
-	AppTokenClientFactory getAppTokenClientFactory() {
+	public AppTokenClientFactory getAppTokenClientFactory() {
 		// needed for test
 		return appTokenClientFactory;
 	}
 
-	RestClientFactory getRestClientFactory() {
+	public RestClientFactory getRestClientFactory() {
 		// needed for test
 		return restClientFactory;
 	}
 
-	String getUserId() {
+	public String getUserId() {
 		// needed for test
 		return userId;
 	}
 
-	String getAppToken() {
+	public String getAppToken() {
 		// needed for test
 		return appToken;
 	}
 
 	@Override
 	public String read(String recordType, String recordId) {
-		RestClient restClient = setUpRestClientWithAuthoToken();
+		RestClient restClient = setUpRestClientWithAuthToken();
 		return restClient.readRecordAsJson(recordType, recordId);
 	}
 
 	@Override
 	public String update(String recordType, String recordId, String json) {
-		RestClient restClient = setUpRestClientWithAuthoToken();
+		RestClient restClient = setUpRestClientWithAuthToken();
 		return restClient.updateRecordFromJson(recordType, recordId, json);
 	}
 
 	@Override
 	public String delete(String recordType, String recordId) {
-		RestClient restClient = setUpRestClientWithAuthoToken();
+		RestClient restClient = setUpRestClientWithAuthToken();
 		return restClient.deleteRecord(recordType, recordId);
 	}
 
 	@Override
 	public String readList(String recordType) {
-		RestClient restClient = setUpRestClientWithAuthoToken();
+		RestClient restClient = setUpRestClientWithAuthToken();
 		return restClient.readRecordListAsJson(recordType);
 	}
 
 	@Override
 	public String readIncomingLinks(String recordType, String recordId) {
-		RestClient restClient = setUpRestClientWithAuthoToken();
+		RestClient restClient = setUpRestClientWithAuthToken();
 		return restClient.readIncomingLinksAsJson(recordType, recordId);
+	}
+
+	@Override
+	public String create(String recordType, ClientDataGroup dataGroup) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

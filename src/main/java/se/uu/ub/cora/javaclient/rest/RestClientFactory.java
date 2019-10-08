@@ -1,4 +1,4 @@
-package se.uu.ub.cora.javaclient;
+package se.uu.ub.cora.javaclient.rest;
 
 public interface RestClientFactory {
 

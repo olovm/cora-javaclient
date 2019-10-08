@@ -16,20 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.javaclient;
+package se.uu.ub.cora.javaclient.apptoken;
 
-public interface RestClient {
+public interface AppTokenClientFactory {
 
-	String readRecordAsJson(String recordType, String recordId);
-
-	String createRecordFromJson(String recordType, String json);
-
-	String updateRecordFromJson(String recordType, String recordId, String json);
-
-	String deleteRecord(String recordType, String recordId);
-
-	String readRecordListAsJson(String recordType);
-
-	String readIncomingLinksAsJson(String recordType, String recordId);
+	AppTokenClient factor(String userId, String appToken);
 
 }

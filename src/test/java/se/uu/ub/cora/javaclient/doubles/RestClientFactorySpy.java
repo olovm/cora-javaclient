@@ -21,8 +21,8 @@ package se.uu.ub.cora.javaclient.doubles;
 import java.util.ArrayList;
 import java.util.List;
 
-import se.uu.ub.cora.javaclient.RestClient;
-import se.uu.ub.cora.javaclient.RestClientFactory;
+import se.uu.ub.cora.javaclient.rest.RestClient;
+import se.uu.ub.cora.javaclient.rest.RestClientFactory;
 
 public class RestClientFactorySpy implements RestClientFactory {
 

@@ -16,19 +16,25 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.javaclient;
+package se.uu.ub.cora.javaclient.rest;
 
-public interface CoraClient {
-	String create(String recordType, String json);
+import se.uu.ub.cora.httphandler.HttpHandlerFactory;
+import se.uu.ub.cora.httphandler.HttpHandlerFactoryImp;
+import se.uu.ub.cora.javaclient.RestClientImp;
 
-	String read(String recordType, String recordId);
+public class RestClientFactoryImp implements RestClientFactory {
 
-	String update(String recordType, String recordId, String json);
+	private String baseUrl;
 
-	String delete(String recordType, String recordId);
+	public RestClientFactoryImp(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
 
-	String readList(String recordType);
-
-	String readIncomingLinks(String recordType, String recordId);
+	@Override
+	public RestClient factorUsingAuthToken(String authToken) {
+		HttpHandlerFactory httpHandlerFactory = new HttpHandlerFactoryImp();
+		return RestClientImp.usingHttpHandlerFactoryAndBaseUrlAndAuthToken(httpHandlerFactory,
+				baseUrl, authToken);
+	}
 
 }

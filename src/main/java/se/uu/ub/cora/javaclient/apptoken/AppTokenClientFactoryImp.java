@@ -16,24 +16,28 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.javaclient;
+package se.uu.ub.cora.javaclient.apptoken;
 
 import se.uu.ub.cora.httphandler.HttpHandlerFactory;
 import se.uu.ub.cora.httphandler.HttpHandlerFactoryImp;
+import se.uu.ub.cora.javaclient.AppTokenClientCredentials;
+import se.uu.ub.cora.javaclient.AppTokenClientImp;
 
-public class RestClientFactoryImp implements RestClientFactory {
+public class AppTokenClientFactoryImp implements AppTokenClientFactory {
 
-	private String baseUrl;
+	private String appTokenVerifierUrl;
 
-	public RestClientFactoryImp(String baseUrl) {
-		this.baseUrl = baseUrl;
+	public AppTokenClientFactoryImp(String appTokenVerifierUrl) {
+		this.appTokenVerifierUrl = appTokenVerifierUrl;
 	}
 
 	@Override
-	public RestClient factorUsingAuthToken(String authToken) {
+	public AppTokenClient factor(String userId, String appToken) {
 		HttpHandlerFactory httpHandlerFactory = new HttpHandlerFactoryImp();
-		return RestClientImp.usingHttpHandlerFactoryAndBaseUrlAndAuthToken(httpHandlerFactory,
-				baseUrl, authToken);
+		AppTokenClientCredentials credentials = new AppTokenClientCredentials(appTokenVerifierUrl,
+				userId, appToken);
+		return AppTokenClientImp.usingHttpHandlerFactoryAndCredentials(
+				httpHandlerFactory, credentials);
 	}
 
 }

@@ -22,8 +22,6 @@ import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.javaclient.CoraClientConfig;
-
 public class CoraClientConfigTest {
 	@Test
 	public void testInit() throws Exception {

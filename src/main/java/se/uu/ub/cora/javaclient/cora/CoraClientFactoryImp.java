@@ -16,7 +16,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.javaclient;
+package se.uu.ub.cora.javaclient.cora;
+
+import se.uu.ub.cora.javaclient.CoraClientImp;
+import se.uu.ub.cora.javaclient.apptoken.AppTokenClientFactoryImp;
+import se.uu.ub.cora.javaclient.rest.RestClientFactoryImp;
 
 public final class CoraClientFactoryImp implements CoraClientFactory {
 

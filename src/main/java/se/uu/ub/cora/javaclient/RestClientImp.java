@@ -23,6 +23,8 @@ import javax.ws.rs.core.Response.Status;
 
 import se.uu.ub.cora.httphandler.HttpHandler;
 import se.uu.ub.cora.httphandler.HttpHandlerFactory;
+import se.uu.ub.cora.javaclient.cora.CoraClientException;
+import se.uu.ub.cora.javaclient.rest.RestClient;
 
 public final class RestClientImp implements RestClient {
 	private static final String RETURNED_ERROR_WAS = ". Returned error was: ";
@@ -67,17 +69,17 @@ public final class RestClientImp implements RestClient {
 		return httpHandler;
 	}
 
-	HttpHandlerFactory getHttpHandlerFactory() {
+	public HttpHandlerFactory getHttpHandlerFactory() {
 		// needed for test
 		return httpHandlerFactory;
 	}
 
-	String getBaseUrl() {
+	public String getBaseUrl() {
 		// needed for test
 		return baseUrl;
 	}
 
-	String getAuthToken() {
+	public String getAuthToken() {
 		// needed for test
 		return authToken;
 	}
