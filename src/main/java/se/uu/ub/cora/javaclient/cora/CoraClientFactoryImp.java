@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Uppsala University Library
+ * Copyright 2018, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,21 +18,23 @@
  */
 package se.uu.ub.cora.javaclient.cora;
 
+import se.uu.ub.cora.clientdata.converter.javatojson.DataToJsonConverterFactory;
+import se.uu.ub.cora.clientdata.converter.javatojson.DataToJsonConverterFactoryImp;
 import se.uu.ub.cora.javaclient.CoraClientImp;
 import se.uu.ub.cora.javaclient.apptoken.AppTokenClientFactoryImp;
 import se.uu.ub.cora.javaclient.rest.RestClientFactoryImp;
 
 public final class CoraClientFactoryImp implements CoraClientFactory {
 
-	public static CoraClientFactoryImp usingAppTokenVerifierUrlAndBaseUrl(
-			String appTokenVerifierUrl, String baseUrl) {
-		return new CoraClientFactoryImp(appTokenVerifierUrl, baseUrl);
-	}
-
 	private AppTokenClientFactoryImp appTokenClientFactory;
 	private RestClientFactoryImp restClientFactory;
 	private String appTokenVerifierUrl;
 	private String baseUrl;
+
+	public static CoraClientFactoryImp usingAppTokenVerifierUrlAndBaseUrl(
+			String appTokenVerifierUrl, String baseUrl) {
+		return new CoraClientFactoryImp(appTokenVerifierUrl, baseUrl);
+	}
 
 	private CoraClientFactoryImp(String appTokenVerifierUrl, String baseUrl) {
 		this.appTokenVerifierUrl = appTokenVerifierUrl;
@@ -43,7 +45,9 @@ public final class CoraClientFactoryImp implements CoraClientFactory {
 
 	@Override
 	public CoraClient factor(String userId, String appToken) {
-		return new CoraClientImp(appTokenClientFactory, restClientFactory, userId, appToken);
+		DataToJsonConverterFactory dataToJsonConverterFactory = new DataToJsonConverterFactoryImp();
+		return new CoraClientImp(appTokenClientFactory, restClientFactory,
+				dataToJsonConverterFactory, userId, appToken);
 	}
 
 	public String getAppTokenVerifierUrl() {

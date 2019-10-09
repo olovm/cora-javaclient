@@ -37,4 +37,9 @@ public class RestClientFactoryImp implements RestClientFactory {
 				baseUrl, authToken);
 	}
 
+	public String getBaseUrl() {
+		// needed for test
+		return baseUrl;
+	}
+
 }

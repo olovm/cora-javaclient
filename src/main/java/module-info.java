@@ -1,7 +1,7 @@
 module se.uu.ub.cora.javaclient {
 	requires transitive se.uu.ub.cora.httphandler;
 	requires java.ws.rs;
-	requires se.uu.ub.cora.clientdata;
+	requires transitive se.uu.ub.cora.clientdata;
 
 	exports se.uu.ub.cora.javaclient.apptoken;
 	exports se.uu.ub.cora.javaclient.cora;

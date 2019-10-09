@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Uppsala University Library
+ * Copyright 2018, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -24,11 +24,11 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.javaclient.AppTokenClientImp;
+import se.uu.ub.cora.clientdata.converter.javatojson.DataToJsonConverterFactory;
+import se.uu.ub.cora.clientdata.converter.javatojson.DataToJsonConverterFactoryImp;
 import se.uu.ub.cora.javaclient.CoraClientImp;
-import se.uu.ub.cora.javaclient.RestClientImp;
-import se.uu.ub.cora.javaclient.apptoken.AppTokenClientFactory;
-import se.uu.ub.cora.javaclient.rest.RestClientFactory;
+import se.uu.ub.cora.javaclient.apptoken.AppTokenClientFactoryImp;
+import se.uu.ub.cora.javaclient.rest.RestClientFactoryImp;
 
 public class CoraClientFactoryTest {
 	private CoraClientImp coraClient;
@@ -42,26 +42,28 @@ public class CoraClientFactoryTest {
 		baseUrl = "someBaseUrl";
 		clientFactory = CoraClientFactoryImp.usingAppTokenVerifierUrlAndBaseUrl(appTokenVerifierUrl,
 				baseUrl);
-		String userId = "someUserId";
-		String appToken = "someAppToken";
-		coraClient = (CoraClientImp) clientFactory.factor(userId, appToken);
 	}
 
 	@Test
-	public void testFactor() throws Exception {
-		AppTokenClientFactory appTokenClientFactory = coraClient.getAppTokenClientFactory();
-		AppTokenClientImp appTokenClient = (AppTokenClientImp) appTokenClientFactory.factor("", "");
-		assertEquals(appTokenClient.getAppTokenVerifierUrl(),
-				appTokenVerifierUrl + "rest/apptoken/");
+	public void testCorrectFactoriesAreSentToCoraClient() throws Exception {
+		coraClient = (CoraClientImp) clientFactory.factor("someUserId", "someAppToken");
 
-		RestClientFactory restClientFactory = coraClient.getRestClientFactory();
-		assertTrue(restClientFactory instanceof RestClientFactory);
-		RestClientImp restClient = (RestClientImp) restClientFactory.factorUsingAuthToken("");
-		assertEquals(restClient.getBaseUrl(), baseUrl + "record/");
+		AppTokenClientFactoryImp appTokenClientFactory = (AppTokenClientFactoryImp) coraClient
+				.getAppTokenClientFactory();
+		assertEquals(appTokenClientFactory.getAppTokenVerifierUrl(), appTokenVerifierUrl);
+
+		RestClientFactoryImp restClientFactory = (RestClientFactoryImp) coraClient
+				.getRestClientFactory();
+		assertEquals(restClientFactory.getBaseUrl(), baseUrl);
+
+		DataToJsonConverterFactory dataToJsonConverterFactory = coraClient
+				.getDataToJsonConverterFactory();
+		assertTrue(dataToJsonConverterFactory instanceof DataToJsonConverterFactoryImp);
 	}
 
 	@Test
 	public void testFactorParametersSentAlong() throws Exception {
+		coraClient = (CoraClientImp) clientFactory.factor("someUserId", "someAppToken");
 		assertEquals(coraClient.getUserId(), "someUserId");
 		assertEquals(coraClient.getAppToken(), "someAppToken");
 	}

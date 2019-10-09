@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Uppsala University Library
+ * Copyright 2018, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -20,11 +20,15 @@
 package se.uu.ub.cora.javaclient;
 
 import se.uu.ub.cora.clientdata.ClientDataGroup;
+import se.uu.ub.cora.clientdata.converter.javatojson.DataToJsonConverter;
+import se.uu.ub.cora.clientdata.converter.javatojson.DataToJsonConverterFactory;
 import se.uu.ub.cora.javaclient.apptoken.AppTokenClient;
 import se.uu.ub.cora.javaclient.apptoken.AppTokenClientFactory;
 import se.uu.ub.cora.javaclient.cora.CoraClient;
 import se.uu.ub.cora.javaclient.rest.RestClient;
 import se.uu.ub.cora.javaclient.rest.RestClientFactory;
+import se.uu.ub.cora.json.builder.JsonBuilderFactory;
+import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
 
 public class CoraClientImp implements CoraClient {
 
@@ -33,11 +37,14 @@ public class CoraClientImp implements CoraClient {
 	private AppTokenClientFactory appTokenClientFactory;
 	private String userId;
 	private String appToken;
+	private DataToJsonConverterFactory dataToJsonConverterFactory;
 
 	public CoraClientImp(AppTokenClientFactory appTokenClientFactory,
-			RestClientFactory restClientFactory, String userId, String appToken) {
+			RestClientFactory restClientFactory,
+			DataToJsonConverterFactory dataToJsonConverterFactory, String userId, String appToken) {
 		this.appTokenClientFactory = appTokenClientFactory;
 		this.restClientFactory = restClientFactory;
+		this.dataToJsonConverterFactory = dataToJsonConverterFactory;
 		this.userId = userId;
 		this.appToken = appToken;
 		appTokenClient = appTokenClientFactory.factor(userId, appToken);
@@ -54,24 +61,20 @@ public class CoraClientImp implements CoraClient {
 		return restClientFactory.factorUsingAuthToken(authToken);
 	}
 
-	public AppTokenClientFactory getAppTokenClientFactory() {
-		// needed for test
-		return appTokenClientFactory;
+	@Override
+	public String create(String recordType, ClientDataGroup dataGroup) {
+		String json = convertDataGroupToJson(dataGroup);
+		return create(recordType, json);
 	}
 
-	public RestClientFactory getRestClientFactory() {
-		// needed for test
-		return restClientFactory;
+	private String convertDataGroupToJson(ClientDataGroup dataGroup) {
+		DataToJsonConverter converter = createConverter(dataGroup);
+		return converter.toJson();
 	}
 
-	public String getUserId() {
-		// needed for test
-		return userId;
-	}
-
-	public String getAppToken() {
-		// needed for test
-		return appToken;
+	private DataToJsonConverter createConverter(ClientDataGroup dataGroup) {
+		JsonBuilderFactory factory = new OrgJsonBuilderFactoryAdapter();
+		return dataToJsonConverterFactory.createForClientDataElement(factory, dataGroup);
 	}
 
 	@Override
@@ -104,10 +107,28 @@ public class CoraClientImp implements CoraClient {
 		return restClient.readIncomingLinksAsJson(recordType, recordId);
 	}
 
-	@Override
-	public String create(String recordType, ClientDataGroup dataGroup) {
-		// TODO Auto-generated method stub
-		return null;
+	public AppTokenClientFactory getAppTokenClientFactory() {
+		// needed for test
+		return appTokenClientFactory;
 	}
 
+	public RestClientFactory getRestClientFactory() {
+		// needed for test
+		return restClientFactory;
+	}
+
+	public String getUserId() {
+		// needed for test
+		return userId;
+	}
+
+	public String getAppToken() {
+		// needed for test
+		return appToken;
+	}
+
+	public DataToJsonConverterFactory getDataToJsonConverterFactory() {
+		// needed for test
+		return dataToJsonConverterFactory;
+	}
 }
