@@ -36,8 +36,13 @@ public class AppTokenClientFactoryImp implements AppTokenClientFactory {
 		HttpHandlerFactory httpHandlerFactory = new HttpHandlerFactoryImp();
 		AppTokenClientCredentials credentials = new AppTokenClientCredentials(appTokenVerifierUrl,
 				userId, appToken);
-		return AppTokenClientImp.usingHttpHandlerFactoryAndCredentials(
-				httpHandlerFactory, credentials);
+		return AppTokenClientImp.usingHttpHandlerFactoryAndCredentials(httpHandlerFactory,
+				credentials);
+	}
+
+	public String getAppTokenVerifierUrl() {
+		// needed for test
+		return appTokenVerifierUrl;
 	}
 
 }

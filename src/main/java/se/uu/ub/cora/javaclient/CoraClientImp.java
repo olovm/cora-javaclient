@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Uppsala University Library
+ * Copyright 2018, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -63,35 +63,18 @@ public class CoraClientImp implements CoraClient {
 
 	@Override
 	public String create(String recordType, ClientDataGroup dataGroup) {
-		DataToJsonConverter converter = createConverter(dataGroup);
-		String json = converter.toJson();
+		String json = convertDataGroupToJson(dataGroup);
 		return create(recordType, json);
+	}
+
+	private String convertDataGroupToJson(ClientDataGroup dataGroup) {
+		DataToJsonConverter converter = createConverter(dataGroup);
+		return converter.toJson();
 	}
 
 	private DataToJsonConverter createConverter(ClientDataGroup dataGroup) {
 		JsonBuilderFactory factory = new OrgJsonBuilderFactoryAdapter();
-		return dataToJsonConverterFactory
-				.createForClientDataElement(factory, dataGroup);
-	}
-
-	public AppTokenClientFactory getAppTokenClientFactory() {
-		// needed for test
-		return appTokenClientFactory;
-	}
-
-	public RestClientFactory getRestClientFactory() {
-		// needed for test
-		return restClientFactory;
-	}
-
-	public String getUserId() {
-		// needed for test
-		return userId;
-	}
-
-	public String getAppToken() {
-		// needed for test
-		return appToken;
+		return dataToJsonConverterFactory.createForClientDataElement(factory, dataGroup);
 	}
 
 	@Override
@@ -124,4 +107,28 @@ public class CoraClientImp implements CoraClient {
 		return restClient.readIncomingLinksAsJson(recordType, recordId);
 	}
 
+	public AppTokenClientFactory getAppTokenClientFactory() {
+		// needed for test
+		return appTokenClientFactory;
+	}
+
+	public RestClientFactory getRestClientFactory() {
+		// needed for test
+		return restClientFactory;
+	}
+
+	public String getUserId() {
+		// needed for test
+		return userId;
+	}
+
+	public String getAppToken() {
+		// needed for test
+		return appToken;
+	}
+
+	public DataToJsonConverterFactory getDataToJsonConverterFactory() {
+		// needed for test
+		return dataToJsonConverterFactory;
+	}
 }

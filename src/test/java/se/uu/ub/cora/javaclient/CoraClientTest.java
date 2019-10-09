@@ -106,12 +106,18 @@ public class CoraClientTest {
 	public void testCreate() throws Exception {
 		String json = "some fake json";
 		String createdJson = coraClient.create("someType", json);
+
+		assertCorrectDataSentToRestClient(json, createdJson);
+	}
+
+	private void assertCorrectDataSentToRestClient(String jsonSentToRestClient,
+			String jsonReturnedFromCreate) {
 		RestClientSpy restClient = restClientFactory.factored.get(0);
 		assertEquals(restClientFactory.factored.size(), 1);
 		assertEquals(restClientFactory.usedAuthToken, "someAuthTokenFromSpy");
 		assertEquals(restClient.recordType, "someType");
-		assertEquals(restClient.json, json);
-		assertEquals(createdJson, restClient.returnedAnswer + restClient.methodCalled);
+		assertEquals(restClient.json, jsonSentToRestClient);
+		assertEquals(jsonReturnedFromCreate, restClient.returnedAnswer + restClient.methodCalled);
 		assertEquals(restClient.methodCalled, "create");
 	}
 
@@ -129,16 +135,9 @@ public class CoraClientTest {
 
 		assertTrue(dataToJsonConverterFactory.factory instanceof OrgJsonBuilderFactoryAdapter);
 		assertSame(dataToJsonConverterFactory.clientDataElement, dataGroup);
-
-		RestClientSpy restClient = restClientFactory.factored.get(0);
-		assertEquals(restClientFactory.factored.size(), 1);
-		assertEquals(restClientFactory.usedAuthToken, "someAuthTokenFromSpy");
-		assertEquals(restClient.recordType, "someType");
-		assertEquals(restClient.methodCalled, "create");
-
 		String jsonReturnedFromConverter = dataToJsonConverterFactory.converterSpy.jsonToReturnFromSpy;
-		assertEquals(restClient.json, jsonReturnedFromConverter);
-		assertEquals(createdJson, restClient.returnedAnswer + restClient.methodCalled);
+
+		assertCorrectDataSentToRestClient(jsonReturnedFromConverter, createdJson);
 
 	}
 
